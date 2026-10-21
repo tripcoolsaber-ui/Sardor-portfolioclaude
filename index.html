@@ -689,9 +689,17 @@ body.on-case .pj{--ink:#F2F4F7;--muted:rgba(255,255,255,.52);--line:rgba(255,255
 .clinks a{display:inline-flex;align-items:center;gap:10px;padding:11px 18px 11px 12px;border-radius:999px;color:var(--ink);text-decoration:none;background:rgba(14,52,140,.35);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:inset 0 0 0 .5px rgba(160,200,255,.4);transition:background .25s,transform .25s}
 .clinks a:hover{background:rgba(30,80,190,.6);transform:translateY(-1px)}
 .clinks .ci{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);color:#9fd3ff}.clinks .ci svg{width:17px;height:17px}
-#pet .pscr{position:absolute;left:22.5%;top:34.5%;width:48%;height:37%;border-radius:44% 44% 40% 40%/50% 50% 44% 44%;background:radial-gradient(120% 120% at 50% 40%,#05070c 0%,#020305 70%);display:grid;place-items:center;opacity:0;transform:scale(.96);transition:opacity .35s,transform .35s;pointer-events:none;z-index:6}
+#pet .pscr{position:absolute;right:78%;bottom:86%;min-width:150px;padding:10px 14px 11px;border-radius:14px;background:linear-gradient(160deg,rgba(14,40,96,.72),rgba(4,12,32,.72));-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:inset 0 0 0 .5px rgba(143,216,255,.55),0 0 24px rgba(73,181,255,.25),0 18px 40px -18px rgba(0,0,0,.8);display:grid;gap:4px;opacity:0;transform:translate(10px,10px) scale(.9);transform-origin:100% 100%;transition:opacity .3s,transform .35s cubic-bezier(.2,.8,.2,1);pointer-events:none;z-index:6;white-space:nowrap}
 #pet .pscr.on{opacity:1;transform:none}
-#pet .pscr span{font:600 clamp(8px,.85vw,13px)/1.1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.14em;color:#8fd8ff;text-align:center;padding:0 8%;text-shadow:0 0 6px rgba(73,181,255,.9),0 0 14px rgba(73,181,255,.6)}
+#pet .pscr-h{font:500 9px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.18em;color:rgba(143,216,255,.6);font-style:normal}
+#pet .pscr span{font:600 15px/1.15 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.12em;color:#bfe9ff;text-shadow:0 0 8px rgba(73,181,255,.8)}
+#pet .pscr span::after{content:'';display:inline-block;width:.55em;height:1em;margin-left:3px;vertical-align:-2px;background:#8fd8ff;animation:pscrc 1s steps(1) infinite}
+@keyframes pscrc{50%{opacity:0}}
+/* the tail: two small glowing dots stepping down to the robot, like a thought bubble */
+#pet .pscr b,#pet .pscr b::after{position:absolute;border-radius:50%;background:rgba(14,40,96,.8);box-shadow:inset 0 0 0 .5px rgba(143,216,255,.6),0 0 10px rgba(73,181,255,.35)}
+#pet .pscr b{right:-14px;bottom:-12px;width:12px;height:12px}
+#pet .pscr b::after{content:'';right:-12px;bottom:-12px;width:7px;height:7px}
+@media (max-width:900px){#pet .pscr{right:62%;bottom:92%;min-width:120px;padding:8px 11px}#pet .pscr span{font-size:12px}}
 @media (max-width:900px){.cpg .contact{grid-template-columns:1fr;padding-top:100px}.cpet{order:-1;width:200px!important;margin:0 auto}}
 </style>
 </head><body>
@@ -890,9 +898,10 @@ function pageContact(){var P=state.profile,l=contactLinks();
   +(P.contactLine?'<p class="lead">'+esc(P.contactLine)+'</p>':'')+(P.email?'<a class="email" href="mailto:'+esc(P.email.trim())+'">'+esc(P.email.trim())+'</a>':'')+(l?'<ul class="clinks">'+l+'</ul>':'')+'</div>'
   +'<div class="pet-spot pet-home cpet" data-pet="robot"></div></div></section>';}
 /* the robot’s visor cycles through what a designer does, on the Contact page only */
-var SCR={t:0,i:0};function scrStart(){scrStop();var bob=$('#pet .bob');if(!bob)return;var el=$('.pscr',bob);if(!el){el=document.createElement('div');el.className='pscr';el.setAttribute('aria-hidden','true');el.innerHTML='<span></span>';bob.appendChild(el);}
- function step(){var sp=$('span',el);el.classList.add('on');sp.textContent=CSKILLS[SCR.i%CSKILLS.length];SCR.i++;SCR.t=setTimeout(function(){el.classList.remove('on');SCR.t=setTimeout(step,1600);},2200);}SCR.t=setTimeout(step,1800);}
-function scrStop(){clearTimeout(SCR.t);var el=$('#pet .pscr');if(el)el.classList.remove('on');}
+var SCR={t:0,i:0,k:0};function scrStart(){scrStop();if(!petEl)return;var el=$('.pscr',petEl);if(!el){el=document.createElement('div');el.className='pscr';el.setAttribute('aria-hidden','true');el.innerHTML='<i class="pscr-h">SKILL_'+'</i><span></span><b></b>';petEl.appendChild(el);}
+ var sp=$('span',el),hd=$('.pscr-h',el);function type(txt,n){sp.textContent=txt.slice(0,n);if(n<txt.length)SCR.k=setTimeout(function(){type(txt,n+1);},45);}
+ function step(){var i=SCR.i%CSKILLS.length;hd.textContent='SKILL '+String(i+1).padStart(2,'0')+'/'+String(CSKILLS.length).padStart(2,'0');el.classList.add('on');type(CSKILLS[i],0);SCR.i++;SCR.t=setTimeout(function(){el.classList.remove('on');SCR.t=setTimeout(step,1300);},2600);}SCR.t=setTimeout(step,1600);}
+function scrStop(){clearTimeout(SCR.t);clearTimeout(SCR.k);var el=petEl&&$('.pscr',petEl);if(el)el.classList.remove('on');}
 
 /* ---------- routing ---------- */
 function parse(h){
