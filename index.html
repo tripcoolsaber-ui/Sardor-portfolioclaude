@@ -684,23 +684,17 @@ body.on-case .pj{--ink:#F2F4F7;--muted:rgba(255,255,255,.52);--line:rgba(255,255
 .cpg .obg{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
 .cpg .contact{position:relative;z-index:1;--ink:#F2F4F7;--muted:rgba(255,255,255,.58);--line:rgba(255,255,255,.18);color:var(--ink);display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:clamp(24px,5vw,80px);min-height:100vh;padding-top:120px;padding-bottom:90px}
 .cpg .big{color:var(--ink)}.cpg .lead{color:var(--muted)}.cpg .email{color:var(--ink);border-color:rgba(255,255,255,.5)}
-.cpet{width:clamp(220px,25vw,390px)!important;aspect-ratio:1;margin-right:clamp(0px,4vw,60px)}
+.cpet{width:clamp(150px,13vw,210px)!important;aspect-ratio:1}
 .clinks{display:flex;flex-wrap:wrap;gap:12px;list-style:none;padding:0;margin:36px 0 0}
 .clinks a{display:inline-flex;align-items:center;gap:10px;padding:11px 18px 11px 12px;border-radius:999px;color:var(--ink);text-decoration:none;background:rgba(14,52,140,.35);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:inset 0 0 0 .5px rgba(160,200,255,.4);transition:background .25s,transform .25s}
 .clinks a:hover{background:rgba(30,80,190,.6);transform:translateY(-1px)}
 .clinks .ci{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);color:#9fd3ff}.clinks .ci svg{width:17px;height:17px}
-#pet .pscr{position:absolute;right:78%;bottom:86%;min-width:150px;padding:10px 14px 11px;border-radius:14px;background:linear-gradient(160deg,rgba(14,40,96,.72),rgba(4,12,32,.72));-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:inset 0 0 0 .5px rgba(143,216,255,.55),0 0 24px rgba(73,181,255,.25),0 18px 40px -18px rgba(0,0,0,.8);display:grid;gap:4px;opacity:0;transform:translate(10px,10px) scale(.9);transform-origin:100% 100%;transition:opacity .3s,transform .35s cubic-bezier(.2,.8,.2,1);pointer-events:none;z-index:6;white-space:nowrap}
-#pet .pscr.on{opacity:1;transform:none}
-#pet .pscr-h{font:500 9px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.18em;color:rgba(143,216,255,.6);font-style:normal}
-#pet .pscr span{font:600 15px/1.15 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.12em;color:#bfe9ff;text-shadow:0 0 8px rgba(73,181,255,.8)}
-#pet .pscr span::after{content:'';display:inline-block;width:.55em;height:1em;margin-left:3px;vertical-align:-2px;background:#8fd8ff;animation:pscrc 1s steps(1) infinite}
-@keyframes pscrc{50%{opacity:0}}
-/* the tail: two small glowing dots stepping down to the robot, like a thought bubble */
-#pet .pscr b,#pet .pscr b::after{position:absolute;border-radius:50%;background:rgba(14,40,96,.8);box-shadow:inset 0 0 0 .5px rgba(143,216,255,.6),0 0 10px rgba(73,181,255,.35)}
-#pet .pscr b{right:-14px;bottom:-12px;width:12px;height:12px}
-#pet .pscr b::after{content:'';right:-12px;bottom:-12px;width:7px;height:7px}
-@media (max-width:900px){#pet .pscr{right:62%;bottom:92%;min-width:120px;padding:8px 11px}#pet .pscr span{font-size:12px}}
-@media (max-width:900px){.cpg .contact{grid-template-columns:1fr;padding-top:100px}.cpet{order:-1;width:200px!important;margin:0 auto}}
+.cpg .contact{grid-template-columns:minmax(0,1fr) auto auto;column-gap:clamp(20px,3.5vw,56px)}
+.cdrum{position:relative;width:clamp(200px,17vw,260px);height:clamp(260px,34vh,340px);perspective:700px;opacity:0;transition:opacity .8s ease;-webkit-mask:linear-gradient(transparent,#000 20%,#000 80%,transparent);mask:linear-gradient(transparent,#000 20%,#000 80%,transparent)}
+.cdrum.lit{opacity:1}
+.cdrum span{position:absolute;left:0;top:50%;height:44px;margin-top:-22px;display:flex;align-items:center;white-space:nowrap;transform-origin:0 50%;will-change:transform,opacity;font-weight:600;font-size:clamp(17px,1.5vw,24px);letter-spacing:-.01em;color:rgba(200,236,255,.9);text-shadow:0 0 14px rgba(73,181,255,.55)}
+.cdrum span.on{color:#fff;text-shadow:0 0 10px rgba(143,216,255,.9),0 0 26px rgba(73,181,255,.6)}
+@media (max-width:900px){.cpg .contact{grid-template-columns:1fr;padding-top:100px}.cpet{order:-2;width:190px!important;margin:0 auto}.cdrum{order:-1;margin:-10px auto 0;height:190px;width:240px;opacity:1}.cdrum span{left:50%;transform-origin:50% 50%;margin-left:-120px;width:240px;justify-content:center}}
 
 /* case names in bold */
 .plist .ttl,.plist li.is-active .ttl{font-weight:700;letter-spacing:-.01em}
@@ -898,16 +892,24 @@ function contactLinks(){var P=state.profile,a=[];
   String(P.links||'').split('\n').forEach(function(l){var x=l.split('|');if(x.length<2)return;var u=safeUrl(x.slice(1).join('|'));if(u)a.push([x[0].trim()||new URL(u).host,u]);});
   if(P.phone){var ph=String(P.phone).trim();a.unshift(['Phone','tel:'+ph.replace(/[^+\d]/g,''),ph]);}
   return a.map(function(x){var t=x[0]==='Phone';return '<li><a href="'+esc(x[1])+'"'+(t?'':' target="_blank" rel="noopener"')+'><span class="ci">'+(CICO[x[0]]||'')+'</span><span>'+esc(x[2]||x[0])+'</span></a></li>';}).join('');}
-var CSKILLS=['BRANDING','LOGO DESIGN','BRAND IDENTITY','PACKAGING','KEY VISUALS','ART DIRECTION','UI / UX','MOTION'];
+var CSKILLS=['Branding','Logo design','Brand identity','Packaging','Key visuals','Art direction','UI / UX','Motion'];
 function pageContact(){var P=state.profile,l=contactLinks();
   return '<section class="cpg"><canvas class="obg" aria-hidden="true"></canvas><div class="contact container"><div class="c-l"><h1 class="big">Let’s work<br>together.</h1>'
   +(P.contactLine?'<p class="lead">'+esc(P.contactLine)+'</p>':'')+(P.email?'<a class="email" href="mailto:'+esc(P.email.trim())+'">'+esc(P.email.trim())+'</a>':'')+(l?'<ul class="clinks">'+l+'</ul>':'')+'</div>'
-  +'<div class="pet-spot pet-home cpet" data-pet="robot"></div></div></section>';}
-/* the robot’s visor cycles through what a designer does, on the Contact page only */
-var SCR={t:0,i:0,k:0};function scrStart(){scrStop();if(!petEl)return;var el=$('.pscr',petEl);if(!el){el=document.createElement('div');el.className='pscr';el.setAttribute('aria-hidden','true');el.innerHTML='<i class="pscr-h">SKILL_'+'</i><span></span><b></b>';petEl.appendChild(el);}
- var sp=$('span',el),hd=$('.pscr-h',el);function type(txt,n){sp.textContent=txt.slice(0,n);if(n<txt.length)SCR.k=setTimeout(function(){type(txt,n+1);},45);}
- function step(){var i=SCR.i%CSKILLS.length;hd.textContent='SKILL '+String(i+1).padStart(2,'0')+'/'+String(CSKILLS.length).padStart(2,'0');el.classList.add('on');type(CSKILLS[i],0);SCR.i++;SCR.t=setTimeout(function(){el.classList.remove('on');SCR.t=setTimeout(step,1300);},2600);}SCR.t=setTimeout(step,1600);}
-function scrStop(){clearTimeout(SCR.t);clearTimeout(SCR.k);var el=petEl&&$('.pscr',petEl);if(el)el.classList.remove('on');}
+  +'<div class="pet-spot pet-home cpet" data-pet="robot"></div><div class="cdrum" role="list" aria-label="What I do">'+CSKILLS.map(function(k){return '<span role="listitem">'+esc(k)+'</span>';}).join('')+'</div></div></section>';}
+/* Contact: the robot turns into its projector and projects a slowly turning drum of skills; the one in the middle grows */
+var CDR={raf:0,pos:0,tgt:0,next:0,on:false,proj:false,tok:0,items:[]};
+function ctLayout(){var n=CDR.items.length,R=Math.min(130,(($('.cdrum')||{}).clientHeight||300)*.42);CDR.items.forEach(function(el,k){var d=k-CDR.pos;d=((d%n)+n+n/2)%n-n/2;var a=d*.46,c=Math.cos(a),v=Math.max(0,c),hit=Math.max(0,1-Math.abs(d));
+  el.style.transform='translateY('+(Math.sin(a)*R).toFixed(1)+'px) rotateX('+(-a*57.3).toFixed(1)+'deg) scale('+(0.78+0.5*hit).toFixed(3)+')';el.style.opacity=(Math.abs(a)>1.5?0:(0.12+0.5*v*v+0.38*hit)).toFixed(3);el.classList.toggle('on',hit>.6);});}
+function ctTick(now){if(!CDR.on)return;if(!CDR.items.length||!document.body.contains(CDR.items[0])){CDR.items=$$('.cdrum span');var dq=$('.cdrum');if(dq&&CDR.proj)dq.classList.add('lit');}if(!reduced()&&now>CDR.next){CDR.tgt+=1;CDR.next=now+2300;}CDR.pos+=(CDR.tgt-CDR.pos)*.085;ctLayout();if(CDR.proj&&!busy&&!pet.moving)beamPos();CDR.raf=requestAnimationFrame(ctTick);}
+function scrStart(n){scrStop();CDR.items=$$('.cdrum span');if(!CDR.items.length){if((n||0)<40&&(!cur||cur.name==='contact'||busy))setTimeout(function(){if(location.hash.indexOf('contact')>=0)scrStart((n||0)+1);},100);return;}CDR.on=true;CDR.pos=CDR.tgt=0;CDR.next=performance.now()+2600;ctLayout();CDR.raf=requestAnimationFrame(ctTick);cProject();}
+async function cProject(){var tok=++CDR.tok,dr=$('.cdrum');if(mqNarrow.matches||reduced()){if(dr)dr.classList.add('lit');return;}
+  await wait(950);if(tok!==CDR.tok||!cur||cur.name!=='contact')return;while(busy||pet.moving){await wait(80);if(tok!==CDR.tok||!cur||cur.name!=='contact')return;}
+  if(XF.ok)await playXform(340);if(tok!==CDR.tok||!cur||cur.name!=='contact')return;
+  squeeze();setMode('sphere');petEl.classList.remove('antic','xform');var sp=$('.cpet');if(sp)sp.dataset.pet='sphere';snap();
+  aim('right');await wait(520);if(tok!==CDR.tok||!cur||cur.name!=='contact')return;
+  CDR.proj=true;if(dr)dr.classList.add('lit');if(beamPos()){beam.style.opacity=.62;beamFlash();}}
+function scrStop(){CDR.on=false;CDR.tok++;cancelAnimationFrame(CDR.raf);if(CDR.proj){CDR.proj=false;beam.style.opacity=0;petEl.classList.remove('aim-right');}}
 
 /* ---------- routing ---------- */
 function parse(h){
@@ -1314,7 +1316,7 @@ function drumRun(){if(DR.raf)cancelAnimationFrame(DR.raf);var c0=DR.cur,t0=perfo
 function onListScroll(){if(busy||pet.moving||!cur||cur.name!=='work')return;snap();}
 setInterval(function(){if(cur&&cur.name==='work'&&!busy&&!pet.moving&&pet.mode==='sphere'&&AIM.ims.length&&!document.hidden&&!reduced()&&!petEl.classList.contains('deploy')){aimTo(3.5,800);setTimeout(function(){if(cur&&cur.name==='work'&&!busy&&!pet.moving)aimTo(6,800);},1700);}},7000);
 function showPv(i){$$('.pv',main).forEach(function(el,j){var on=j===i;el.classList.toggle('on',on);if(on)loadMedia(el);var v=$('video',el);if(v){if(on){if(!reduced())v.play().catch(function(){});}else v.pause();}});}
-function beamPos(){var a,b;if(cur&&cur.name==='project'&&$('.pj-sec',main)){var tg=$('.pj-sec.on .cf-slide.on',main)||$('.pj-sec.on .pj-media',main);if(!tg)return false;var q2=tg.getBoundingClientRect();if(q2.bottom<60||q2.top>innerHeight-40)return false;var t2=Math.max(q2.top,70),b2=Math.min(q2.bottom,innerHeight-20);a={left:q2.left,top:t2};b={left:q2.left,top:b2};}else if(cur&&(cur.name==='case'||cur.name==='project')){var on=$('.cf-slide.on',main);if(!on)return false;var q=on.getBoundingClientRect(),fx=petEl.classList.contains('flip')?q.right-12:q.left;a={left:fx,top:q.top};b={left:fx,top:q.bottom};}else{var tl=$('.cnr.tl',main),bl=$('.cnr.bl',main);if(!tl||!bl)return false;a=tl.getBoundingClientRect();b=bl.getBoundingClientRect();}
+function beamPos(){var a,b;if(cur&&cur.name==='contact'){var dq=$('.cdrum');if(!dq||!CDR.proj)return false;var r=dq.getBoundingClientRect();a={left:r.left-6,top:r.top+r.height*.14};b={left:r.left-6,top:r.bottom-r.height*.14};}else if(cur&&cur.name==='project'&&$('.pj-sec',main)){var tg=$('.pj-sec.on .cf-slide.on',main)||$('.pj-sec.on .pj-media',main);if(!tg)return false;var q2=tg.getBoundingClientRect();if(q2.bottom<60||q2.top>innerHeight-40)return false;var t2=Math.max(q2.top,70),b2=Math.min(q2.bottom,innerHeight-20);a={left:q2.left,top:t2};b={left:q2.left,top:b2};}else if(cur&&(cur.name==='case'||cur.name==='project')){var on=$('.cf-slide.on',main);if(!on)return false;var q=on.getBoundingClientRect(),fx=petEl.classList.contains('flip')?q.right-12:q.left;a={left:fx,top:q.top};b={left:fx,top:q.bottom};}else{var tl=$('.cnr.tl',main),bl=$('.cnr.bl',main);if(!tl||!bl)return false;a=tl.getBoundingClientRect();b=bl.getBoundingClientRect();}
   var rs=petEl.classList.contains('rsph')&&AIM.ims.length,lo=lensOff(),lx=rs?pet.x+lo[0]*pet.k:pet.x+30*pet.k,ly=rs?pet.y+lo[1]*pet.k:pet.y-14*pet.k;var lw=Math.max(2,5*pet.k);beam.style.clipPath='polygon('+lx+'px '+(ly-lw)+'px,'+(a.left+6)+'px '+(a.top+8)+'px,'+(b.left+6)+'px '+(b.top-8)+'px,'+lx+'px '+(ly+lw)+'px)';return true;}
 function beamOn(){if(reduced()||mqNarrow.matches||busy||pet.moving||!cur||(cur.name!=='work'&&cur.name!=='case'&&!(cur.name==='project'&&PJ.proj))||pet.mode!=='sphere'||!beamPos()){beam.style.opacity=0;return;}var pf=$('.preview-frame',main);beam.style.opacity=(pf&&pf.classList.contains('off'))?0:.5*listVis();}
 function beamFlash(){if(reduced()||mqNarrow.matches||!beamPos())return;beam.style.opacity=.5;beam.animate([{opacity:.15},{opacity:1,offset:.3},{opacity:.5}],{duration:900,easing:'ease-out'});}
