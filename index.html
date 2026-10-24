@@ -1465,6 +1465,8 @@ var clampT=0;function clampSoon(){clearTimeout(clampT);clampT=setTimeout(functio
 new MutationObserver(function(){clampSoon();setTimeout(function(){clampTexts(false);},400);}).observe(main,{childList:true});
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){clampTexts(true);});
 window.addEventListener('resize',function(){clearTimeout(clampT);clampT=setTimeout(function(){clampTexts(true);},200);});
+/* stale-page guard: if the phone shows a cached copy of the page, fetch the current build stamp and reload once with a fresh address */
+(function(){var B='20261024084952';try{fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():B;}).then(function(v){v=String(v).trim();if(v&&v!==B&&sessionStorage.getItem('rb')!==v){sessionStorage.setItem('rb',v);location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);}}).catch(function(){});}catch(e){}})();
 var SCRUB={block:false};
 /* after coming back from a tel:/mailto: link, nothing on the page should still look pressed */
 function unstick(){var a=document.activeElement;if(a&&a!==document.body&&a.closest&&a.closest('.clinks,.cf-sub-go,.acc-open,.nav'))try{a.blur();}catch(e){}}
