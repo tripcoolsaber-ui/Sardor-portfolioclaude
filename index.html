@@ -1477,7 +1477,7 @@ new MutationObserver(function(){clampSoon();setTimeout(function(){clampTexts(fal
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){clampTexts(true);});
 window.addEventListener('resize',function(){clearTimeout(clampT);clampT=setTimeout(function(){clampTexts(true);},200);});
 /* stale-page guard: if the phone shows a cached copy of the page, fetch the current build stamp and reload once with a fresh address */
-(function(){var B='20261024100603';try{fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():B;}).then(function(v){v=String(v).trim();if(v&&v!==B&&sessionStorage.getItem('rb')!==v){sessionStorage.setItem('rb',v);location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);}}).catch(function(){});}catch(e){}})();
+(function(){var B='20261024101901';try{fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():B;}).then(function(v){v=String(v).trim();if(v&&v!==B&&sessionStorage.getItem('rb')!==v){sessionStorage.setItem('rb',v);location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);}}).catch(function(){});}catch(e){}})();
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.ab-more');if(!b)return;var box=b.closest('.ab-intro');if(!box)return;var open=box.classList.toggle('open');b.textContent=open?'Less':'More';b.setAttribute('aria-expanded',open?'true':'false');setTimeout(function(){b.classList.remove('is-tapped');},550);});
 var SCRUB={block:false};
 /* after coming back from a tel:/mailto: link, nothing on the page should still look pressed */
@@ -1525,7 +1525,7 @@ function go(hash,opt){
   function fin(){if(done)return;done=true;clearTimeout(wd);petEl.getAnimations().forEach(function(a){a.cancel();});shReset();stage.getAnimations().forEach(function(a){a.cancel();});stage.style.transformOrigin='';busy=false;document.body.classList.remove('busy');snap();if(mqNarrow.matches){eyeTo(0,0);if(PF){pose.t=0;poseRun();}}try{main.focus({preventScroll:true});}catch(e){}if(pending){var p=pending;pending=null;go(p.hash,{push:p.push});}}
   var run=(async function(){
     if(reduced()){doSwap();return;}
-    var MQ=mqNarrow.matches&&!(cur&&(cur.name==='home'||cur.name==='contact'));
+    var MQ=mqNarrow.matches&&!(cur&&(cur.name==='home'||cur.name==='work'||cur.name==='about'||cur.name==='contact'));
     var m=mqNarrow.matches?.72:1,vw=document.documentElement.clientWidth||innerWidth,vh=document.documentElement.clientHeight||innerHeight;sizeCanvas();
     if(LD.raf){cancelAnimationFrame(LD.raf);LD.raf=0;}petEl.classList.remove('landing');CR.on=false;clearTimeout(CR.t);hinting=false;screenOff();if(MQ){/* phones: no crouch and no morph, the shutter starts at the tap (the home page keeps its transformation) */}else if(ANT.ok&&PF&&pet.mode==='robot'){await playAnt(lastTarget);if(XF.ok)await playXform();}else{happy();await wait(80*m);}
     aim(null);squeeze();if(!MQ)setMode('sphere');petEl.classList.remove('antic','xform');
