@@ -1413,11 +1413,11 @@ function go(hash,opt){
   var run=(async function(){
     if(reduced()){doSwap();return;}
     var m=mqNarrow.matches?.72:1,vw=document.documentElement.clientWidth||innerWidth,vh=document.documentElement.clientHeight||innerHeight;sizeCanvas();
-    if(LD.raf){cancelAnimationFrame(LD.raf);LD.raf=0;}petEl.classList.remove('landing');CR.on=false;clearTimeout(CR.t);hinting=false;screenOff();if(ANT.ok&&PF&&pet.mode==='robot'){await playAnt(lastTarget);if(XF.ok)await playXform();}else{happy();await wait(80*m);}
-    aim(null);squeeze();setMode('sphere');petEl.classList.remove('antic','xform');
+    if(LD.raf){cancelAnimationFrame(LD.raf);LD.raf=0;}petEl.classList.remove('landing');CR.on=false;clearTimeout(CR.t);hinting=false;screenOff();if(mqNarrow.matches){/* phones: no crouch and no morph, the shutter starts at the tap */}else if(ANT.ok&&PF&&pet.mode==='robot'){await playAnt(lastTarget);if(XF.ok)await playXform();}else{happy();await wait(80*m);}
+    aim(null);squeeze();if(!mqNarrow.matches)setMode('sphere');petEl.classList.remove('antic','xform');
     stage.style.transformOrigin='50% '+(scrollY+vh/2)+'px';
-    if(!vReady()&&!VS.dead)await waitReady(450);
-    if(vReady()){await videoShutter(vw,vh,doSwap);return;}
+    if(!vReady()&&!VS.dead)await waitReady(mqNarrow.matches?300:450);
+    if(vReady()){await (mqNarrow.matches?videoShutterM:videoShutter)(vw,vh,doSwap);return;}
     await fadeSwap(doSwap);return;
     shBuild(vw,vh);
     var zo=stage.animate([{transform:'scale(1)'},{transform:'scale(.93)'}],{duration:640*m,easing:'cubic-bezier(.6,0,.2,1)',fill:'forwards'});
@@ -1929,6 +1929,19 @@ function waitReady(ms){return new Promise(function(res){var t0=performance.now()
 function vSize(vw,vh){var r=VS.box?VS.box.getBoundingClientRect():null;if(r&&r.width&&r.height){vw=r.width;vh=r.height;}var ar=(VS.cv.width||16)/(VS.cv.height||9),k=mqNarrow.matches?1.12:1,w=Math.max(vw*k,vh*k*ar);VS.cv.style.width=w+'px';VS.cv.style.height=(w/ar)+'px';}
 function vDraw(im){var x=VS.ctx;x.clearRect(0,0,VS.cv.width,VS.cv.height);if(im&&(im.naturalWidth||im.width)){try{x.drawImage(im,0,0,VS.cv.width,VS.cv.height);}catch(e){}}}
 function seqPlay(fr,hook){return new Promise(function(res){var t0=performance.now(),last=-1;function f(now){var i=Math.max(0,Math.floor((now-t0)*VS.fps/1000));if(i>=fr.length){vDraw(fr[fr.length-1]);VS.raf=0;return res();}if(i!==last){last=i;vDraw(fr[i]);if(hook)hook(i);}VS.raf=requestAnimationFrame(f);}f(t0);});}
+/* phones: the same shutter, but quick (about 0.6 s to the new page) and the robot simply fades out and back in */
+async function videoShutterM(vw,vh,doSwap){
+  var f0=VS.fps,bk=false;VS.fps=54;
+  VS.box.style.display='block';vSize(vw,vh);vDraw(null);
+  var po=+getComputedStyle(petEl).opacity||0;if(po>0)petEl.animate([{opacity:po},{opacity:0}],{duration:150,fill:'forwards'});
+  var zo=stage.animate([{transform:'scale(1)'},{transform:'scale(.95)'}],{duration:540,easing:'cubic-bezier(.6,0,.2,1)',fill:'forwards'});
+  await seqPlay(VS.c);
+  zo.cancel();doSwap();
+  stage.style.transformOrigin='50% '+(vh/2)+'px';
+  stage.animate([{transform:'scale(1.05)'},{transform:'scale(1)'}],{duration:560,easing:'cubic-bezier(.2,.7,.2,1)'});
+  await seqPlay(VS.o,function(i){if(i>=7&&!bk){bk=true;petEl.getAnimations().forEach(function(a){a.cancel();});var to=anchorPose();if(to){setMode(to.mode);place(to.x,to.y,to.k);petEl.style.opacity='1';petEl.animate([{opacity:0},{opacity:1}],{duration:300,easing:'ease-out'});}else petEl.style.opacity='0';}});
+  VS.fps=f0;vDraw(null);
+}
 async function videoShutter(vw,vh,doSwap){
   var sc=Math.max(vw/1920,vh/1080),cx=vw/2,cy=vh/2-2.4*sc,jump=null,fly=null;
   VS.box.style.display='block';vSize(vw,vh);vDraw(null);
