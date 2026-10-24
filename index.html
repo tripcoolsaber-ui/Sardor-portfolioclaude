@@ -1565,20 +1565,21 @@ function clampTexts(force){
   var rp=String(kv.role||'').split(' · ').slice(0,2),ind=String(kv.industry||'').split(' / ')[0],sum=rp.concat(ind?[ind]:[]).filter(Boolean).join(' · ');
   var box=document.createElement('div');box.className='meta-sum';box.innerHTML='<div class="ms-l">Role · Industry · Deliverables</div><div class="ms-v"></div>';$('.ms-v',box).textContent=sum;
   var b=document.createElement('button');b.type='button';b.className='txt-more meta-more';b.textContent='All details';b.setAttribute('aria-expanded','false');d.before(b);if(sum)b.before(box);
-  b.addEventListener('click',function(){var closed=d.classList.toggle('meta-c');b.textContent=closed?'All details':'Less';b.setAttribute('aria-expanded',closed?'false':'true');box.classList.toggle('hide',!closed);setTimeout(function(){b.classList.remove('is-tapped');},550);});});
+  if(d.dataset.op==='1'){d.classList.remove('meta-c');b.textContent='Less';b.setAttribute('aria-expanded','true');box.classList.add('hide');}
+  b.addEventListener('click',function(){var closed=d.classList.toggle('meta-c');d.dataset.op=closed?'':'1';b.textContent=closed?'All details':'Less';b.setAttribute('aria-expanded',closed?'false':'true');box.classList.toggle('hide',!closed);setTimeout(function(){b.classList.remove('is-tapped');},550);});});
  CLAMPS.forEach(function(S){$$(S[0],main).forEach(function(p){
   if(p.dataset.cl)return;p.dataset.cl='1';p.style.setProperty('--lc',S[1]);p.classList.add('txt-c');
   if(p.scrollHeight<=p.clientHeight+2){p.classList.remove('txt-c');return;}
-  var b=document.createElement('button');b.type='button';b.className='txt-more';b.textContent='More';b.setAttribute('aria-expanded','false');p.after(b);
-  b.addEventListener('click',function(){var closed=p.classList.toggle('txt-c');b.textContent=closed?'More':'Less';b.setAttribute('aria-expanded',closed?'false':'true');setTimeout(function(){b.classList.remove('is-tapped');},550);});
+  var b=document.createElement('button');b.type='button';b.className='txt-more';b.textContent='More';b.setAttribute('aria-expanded','false');p.after(b);if(p.dataset.op==='1'){p.classList.remove('txt-c');b.textContent='Less';b.setAttribute('aria-expanded','true');}
+  b.addEventListener('click',function(){var closed=p.classList.toggle('txt-c');p.dataset.op=closed?'':'1';b.textContent=closed?'More':'Less';b.setAttribute('aria-expanded',closed?'false':'true');setTimeout(function(){b.classList.remove('is-tapped');},550);});
  });});
 }
 var clampT=0;function clampSoon(){clearTimeout(clampT);clampT=setTimeout(function(){requestAnimationFrame(function(){clampTexts(false);});},60);}
 new MutationObserver(function(){clampSoon();setTimeout(function(){clampTexts(false);},400);requestAnimationFrame(function(){wkDrumInit();});setTimeout(wkDrumInit,300);}).observe(main,{childList:true});
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){clampTexts(true);});
-window.addEventListener('resize',function(){clearTimeout(clampT);clampT=setTimeout(function(){clampTexts(true);},200);});
+var clampW=innerWidth;window.addEventListener('resize',function(){if(innerWidth===clampW)return;clampW=innerWidth;clearTimeout(clampT);clampT=setTimeout(function(){clampTexts(true);},200);});
 /* stale-page guard: if the phone shows a cached copy of the page, fetch the current build stamp and reload once with a fresh address */
-(function(){var B='20261024113916';try{fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():B;}).then(function(v){v=String(v).trim();if(v&&v!==B&&sessionStorage.getItem('rb')!==v){sessionStorage.setItem('rb',v);location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);}}).catch(function(){});}catch(e){}})();
+(function(){var B='20261024115522';try{fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():B;}).then(function(v){v=String(v).trim();if(v&&v!==B&&sessionStorage.getItem('rb')!==v){sessionStorage.setItem('rb',v);location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);}}).catch(function(){});}catch(e){}})();
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.ab-more');if(!b)return;var box=b.closest('.ab-intro');if(!box)return;var open=box.classList.toggle('open');b.textContent=open?'Less':'More';b.setAttribute('aria-expanded',open?'true':'false');setTimeout(function(){b.classList.remove('is-tapped');},550);});
 var SCRUB={block:false};
 /* after coming back from a tel:/mailto: link, nothing on the page should still look pressed */
