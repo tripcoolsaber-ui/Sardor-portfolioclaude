@@ -1442,7 +1442,7 @@ var clTm=0;new MutationObserver(function(){clearTimeout(clTm);clTm=setTimeout(cl
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){clampTexts();});
 window.addEventListener('resize',function(){clearTimeout(clTm);clTm=setTimeout(function(){$$('.cl-btn',main).forEach(function(b){b.remove();});$$('[data-cl]',main).forEach(function(el){el.removeAttribute('data-cl');el.classList.remove('cl-t','cl-open');});clampTexts();},250);});
 /* phones: long descriptions show a few lines and a "More" button; the full text is one tap away (nothing is removed, desktop is untouched) */
-var CLAMPS=[['.case-desc',3],['.pj-hd p',3],['.pj-txt p',3]];
+var CLAMPS=[['.case-desc',1],['.pj-txt p',1]];
 function clampTexts(force){
  if(force){$$('.txt-more',main).forEach(function(b){b.remove();});$$('[data-cl]',main).forEach(function(p){p.classList.remove('txt-c');p.removeAttribute('data-cl');});}
  if(!mqNarrow.matches)return;
