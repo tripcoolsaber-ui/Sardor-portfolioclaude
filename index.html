@@ -1150,14 +1150,8 @@ body.on-home-dkf #pet .rposter{filter:brightness(.86) contrast(1.06) drop-shadow
  .cpg .clinks{margin-top:18px}
 }
 
-.cl-btn{display:none}
 @media (max-width:900px){
- .cl-t:not(.cl-open){display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:var(--lc,3);overflow:hidden}
- .cl-btn{display:inline-block;margin:6px 0 0;padding:8px 0;border:0;background:none;color:#8fb2ff;font:500 .86rem/1 inherit;font-family:inherit;letter-spacing:.01em;cursor:pointer;-webkit-tap-highlight-color:transparent}
- .cl-btn::after{content:" \2193"}.cl-btn.open::after{content:" \2191"}
- .pj-hd .cl-btn{position:relative;z-index:2;color:inherit;opacity:.85;text-decoration:underline;text-underline-offset:3px}
- .cl-btn.is-press{filter:none!important;transform:none!important;opacity:.6}
-}
+    .pj-hd  }
 
 @media (max-width:900px){
  .txt-c{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:var(--lc,3);overflow:hidden}
@@ -1545,16 +1539,6 @@ function lkOk(){return mqNarrow.matches&&pet.mode==='robot'&&!busy&&!hinting&&ID
 function lookAround(){clearTimeout(LK.t);if(lkOk()&&performance.now()>LK.hold){var x=Math.random()<.22?0:(Math.random()*2-1)*11,y=Math.random()<.22?0:(Math.random()*2-1)*6;eyeTo(x,y);if(PF){pose.t=Math.max(-1,Math.min(1,x/12))*PF.n*.5;poseRun();}}LK.t=setTimeout(lookAround,1400+Math.random()*2800);}
 document.addEventListener('pointerdown',function(e){if(e.pointerType!=='touch'||!lkOk())return;var dx=e.clientX-pet.x,dy=e.clientY-pet.y,d=Math.hypot(dx,dy)||1,k=Math.min(1,d/220);eyeTo(dx/d*10*k,dy/d*6*k);if(PF){pose.t=Math.max(-1,Math.min(1,dx/Math.max(220,innerWidth*.34)))*PF.n*.6;poseRun();}LK.hold=performance.now()+1300;clearTimeout(LK.t);LK.t=setTimeout(lookAround,1500);},{passive:true});
 setTimeout(lookAround,1800);
-/* phones: long texts show a few lines and a More button; the full text is one tap away */
-function clampTexts(){if(!mqNarrow.matches)return;
- [['.case-desc',3],['.pj-hd p',3],['.pj-txt p',3]].forEach(function(g){$$(g[0],main).forEach(function(el){if(el.dataset.cl)return;el.dataset.cl='1';el.style.setProperty('--lc',g[1]);el.classList.add('cl-t');
-  if(el.scrollHeight<=el.clientHeight+2){el.classList.remove('cl-t');return;}
-  var b=document.createElement('button');b.type='button';b.className='cl-btn';b.textContent='More';b.setAttribute('aria-expanded','false');
-  b.addEventListener('click',function(){var o=el.classList.toggle('cl-open');b.textContent=o?'Less':'More';b.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false');});
-  el.insertAdjacentElement('afterend',b);});});}
-var clTm=0;new MutationObserver(function(){clearTimeout(clTm);clTm=setTimeout(clampTexts,140);}).observe(main,{childList:true,subtree:true});
-if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){clampTexts();});
-window.addEventListener('resize',function(){clearTimeout(clTm);clTm=setTimeout(function(){$$('.cl-btn',main).forEach(function(b){b.remove();});$$('[data-cl]',main).forEach(function(el){el.removeAttribute('data-cl');el.classList.remove('cl-t','cl-open');});clampTexts();},250);});
 /* phones: long descriptions show a few lines and a "More" button; the full text is one tap away (nothing is removed, desktop is untouched) */
 var CLAMPS=[['.case-desc',1],['.pj-txt p',1],['.ab-job p',1]];
 function clampTexts(force){
@@ -1579,7 +1563,7 @@ new MutationObserver(function(){clampSoon();setTimeout(function(){clampTexts(fal
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){clampTexts(true);});
 var clampW=innerWidth;window.addEventListener('resize',function(){if(innerWidth===clampW)return;clampW=innerWidth;clearTimeout(clampT);clampT=setTimeout(function(){clampTexts(true);},200);});
 /* stale-page guard: if the phone shows a cached copy of the page, fetch the current build stamp and reload once with a fresh address */
-(function(){var B='20261024115713';try{fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():B;}).then(function(v){v=String(v).trim();if(v&&v!==B&&sessionStorage.getItem('rb')!==v){sessionStorage.setItem('rb',v);location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);}}).catch(function(){});}catch(e){}})();
+(function(){var B='20261024121442';try{fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():B;}).then(function(v){v=String(v).trim();if(v&&v!==B&&sessionStorage.getItem('rb')!==v){sessionStorage.setItem('rb',v);location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);}}).catch(function(){});}catch(e){}})();
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.ab-more');if(!b)return;var box=b.closest('.ab-intro');if(!box)return;var open=box.classList.toggle('open');b.textContent=open?'Less':'More';b.setAttribute('aria-expanded',open?'true':'false');setTimeout(function(){b.classList.remove('is-tapped');},550);});
 var SCRUB={block:false};
 /* after coming back from a tel:/mailto: link, nothing on the page should still look pressed */
