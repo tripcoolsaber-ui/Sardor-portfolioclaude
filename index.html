@@ -1403,8 +1403,8 @@ body>.lang-sw{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right
 /* the mark taken apart: its elements one by one under the callout schema */
 .pj-parts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
 .pj-part{margin:0;display:flex;flex-direction:column;gap:12px}
-.pj-pi{display:grid;place-items:center;height:190px;padding:22px;border-radius:18px;background:rgba(255,255,255,.045);box-shadow:inset 0 0 0 .5px rgba(160,200,255,.2)}
-.pj-pi img{display:block;max-width:100%;max-height:100%;object-fit:contain}
+.pj-pi{position:relative;overflow:hidden;height:190px;border-radius:18px;background:rgba(255,255,255,.045);box-shadow:inset 0 0 0 .5px rgba(160,200,255,.2)}
+.pj-pi img{position:absolute;left:22px;top:22px;width:calc(100% - 44px);height:calc(100% - 44px);object-fit:contain;display:block}
 .pj-part figcaption b{display:block;font-weight:600;font-size:.95rem;color:#fff;margin-bottom:4px}
 .pj-part figcaption span{display:block;font-size:.86rem;line-height:1.45;color:#a9b4c6}
 @media (max-width:900px){.pj-parts{grid-template-columns:1fr;gap:18px}.pj-pi{height:170px}}
