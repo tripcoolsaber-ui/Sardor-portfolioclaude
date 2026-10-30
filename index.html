@@ -1410,22 +1410,24 @@ body>.lang-sw{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right
 @media (max-width:900px){.pj-parts{grid-template-columns:1fr;gap:18px}.pj-pi{height:170px}}
 /* phones: the language switch lives on the home page only */
 @media (max-width:900px){body:not(.on-home)>.lang-sw{display:none}}
-/* ===== Home, wide screens (landscape): clock top right, skills under the role, menu as a dock under the robot ===== */
+/* ===== Home, wide screens (landscape): the menu floats above the robot, clock bottom right, skills under the role ===== */
 @media (min-width:901px){
- .hud{top:clamp(22px,4.2vh,42px);bottom:auto;right:clamp(24px,4vw,64px)}
- .home.ob .home-in,.home .home-in{align-items:flex-start;padding-top:max(118px,16cqh)}
- .home .cdrum.hdrum{display:block;position:absolute;left:var(--dl,96px);top:var(--dt,380px);margin:0;padding:0;width:300px;height:124px;box-sizing:border-box;z-index:2;opacity:0}
+ .nav{transition:top .8s cubic-bezier(.3,.8,.2,1)}
+ body.on-home .nav{top:calc(23vh - 36px)}
+ .nav nav{transform:translateX(var(--navshift,0px));transition:transform .8s cubic-bezier(.3,.8,.2,1),background .3s}
+ .home.ob .home-in,.home .home-in{align-items:flex-start;padding-top:max(100px,10.4cqh)}
+ .home .name{font-size:clamp(3.6rem,8.2vw,11rem)}
+ .home .container.home-in{max-width:none!important;margin:0!important;padding-left:5.75vw!important;padding-right:5.75vw!important}
+ .home .sub{font-size:clamp(1.1rem,1.75vw,2.1rem)}
+ .hud{right:2.3vw;bottom:7vh;font-size:clamp(11px,.95vw,19px);gap:.45em}
+ .hud .hud-t{font-size:clamp(22px,1.7vw,34px)}
+ .nav nav{padding:clamp(4px,.35vw,7px)}
+ .nav nav a,body.on-work .nav nav a,body.on-home .nav nav a{font-size:clamp(.98rem,1.15vw,1.5rem)!important;padding:clamp(9px,.85vw,16px) clamp(18px,1.55vw,30px)!important}
+ .nav nav .lang-sw button{font-size:clamp(11px,.78vw,15px);padding:clamp(7px,.6vw,11px) clamp(10px,.8vw,15px)}
+ .scene.ob .pet-home{top:36.5%}
+ .home .cdrum.hdrum{display:block;position:absolute;left:var(--dl,96px);top:var(--dt,500px);margin:0;padding:0;width:340px;height:190px;box-sizing:border-box;z-index:2;opacity:0}
  .home .cdrum.hdrum.lit{opacity:1}
- .home .hdrum span{left:0;margin-left:0;width:auto;justify-content:flex-start;transform-origin:0 50%;font-size:1.3rem}
- .nav,body.on-home .nav,body.on-work .nav{top:auto;bottom:clamp(34px,7.5vh,78px);left:0;right:0;padding:0;background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;pointer-events:none}
- .nav-in{height:auto;justify-content:center;padding:0}
- .nav .logo{display:none}
- .nav nav{pointer-events:auto;position:relative;left:var(--navshift,0px);transition:left .8s cubic-bezier(.3,.8,.2,1);padding:5px;border-radius:999px;background:rgba(12,16,26,.78)!important;-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);box-shadow:inset 0 0 0 .5px rgba(160,200,255,.28),0 16px 34px -10px rgba(0,0,0,.75)!important}
- .nav nav a,body.on-work .nav nav a,body.on-home-dk .nav nav a{color:rgba(255,255,255,.62)!important;padding:11px 20px}
- .nav nav a[aria-current="page"],body.on-work .nav nav a[aria-current="page"]{color:#fff!important}
- .pj,.cflow{padding-bottom:140px}
- body.on-about main,body.on-contact main{padding-bottom:120px}
- .cf-ui{bottom:calc(clamp(34px,7.5vh,78px) + 66px)}
+ .home .hdrum span{left:0;margin-left:0;width:auto;justify-content:flex-start;transform-origin:0 50%;font-size:clamp(1.3rem,1.75vw,2.1rem)}
 }
 /* ===== Home, tablets held upright ===== */
 @media (min-width:601px) and (max-width:900px) and (orientation:portrait){
@@ -1870,8 +1872,8 @@ var SMALL={};try{SMALL=JSON.parse(document.getElementById('smallmap').textConten
 function SM(u){return(mqNarrow.matches&&SMALL[u])?'s/'+u:u;}
 function SMI(h){return mqNarrow.matches?String(h).replace(/\b(src|data-src|poster)="([^"\/]+\.(?:webp|jpe?g|png))"/g,function(m,a,n){return SMALL[n]?a+'="s/'+n+'"':m;}):h;}
 /* home layout helpers: the menu dock sits under the robot on the home page; the skills drum sits under the role on wide screens */
-function navShift(on){var r=document.documentElement;if(!on||mqNarrow.matches){r.style.setProperty('--navshift','0px');return;}var sl=$('.home .pet-home');if(!sl)return;var b=sl.getBoundingClientRect();r.style.setProperty('--navshift',Math.round(b.left+b.width/2-innerWidth/2)+'px');}
-function homeDeskPlace(){if(mqNarrow.matches)return;var sub=$('.home .sub'),d=$('.home .hdrum');if(!sub||!d)return;var b=sub.getBoundingClientRect();d.style.setProperty('--dl',Math.round(b.left)+'px');d.style.setProperty('--dt',Math.round(b.bottom+26)+'px');}
+function navShift(on){var r=document.documentElement;if(!on||mqNarrow.matches){r.style.setProperty('--navshift','0px');return;}var sl=$('.home .pet-home'),nv=$('.nav nav');if(!sl||!nv)return;var b=sl.getBoundingClientRect(),base=nv.offsetLeft+nv.offsetWidth/2;r.style.setProperty('--navshift',Math.round(b.left+b.width/2-base)+'px');}
+function homeDeskPlace(){if(mqNarrow.matches)return;var sub=$('.home .sub'),d=$('.home .hdrum');if(!sub||!d)return;var b=sub.getBoundingClientRect();d.style.setProperty('--dl',Math.round(b.left)+'px');d.style.setProperty('--dt',Math.round(b.bottom+Math.max(28,innerHeight*.07))+'px');}
 addEventListener('resize',function(){if(cur&&cur.name==='home'){homeDeskPlace();navShift(true);}});
 function render(route){
   var P=state.profile,t;navShift(false);
