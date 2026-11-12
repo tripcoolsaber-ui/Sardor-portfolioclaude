@@ -1714,7 +1714,7 @@ function tone(p,i){return p.tone||TONES[i%TONES.length];}
 function mediaOf(p,i){return p.media||[];}
 /* ---------- projector preview (desktop with a mouse): the objects of a layered case jump out of the frame as soon as the robot lands on the case; fly-through between cases ---------- */
 var FXL={"push30": {"bg": "push30-bg.webp", "fw": 2576, "fh": 1438, "L": [{"src": "push30-l-ribbon.webp", "w": 2786, "h": 1525, "cx": 1340, "cy": 570, "Z": 3500}, {"src": "push30-l-bottle.webp", "w": 830, "h": 1219, "cx": 545, "cy": 575, "Z": 2400}, {"src": "push30-l-watch.webp", "w": 718, "h": 782, "cx": 2150, "cy": 350, "Z": 1800}, {"src": "push30-l-dumbbell.webp", "w": 1370, "h": 1154, "cx": 1960, "cy": 1070, "Z": 1400}, {"src": "push30-l-towel.webp", "w": 1612, "h": 804, "cx": 610, "cy": 1190, "Z": 1050}, {"src": "push30-l-stopwatch.webp", "w": 779, "h": 800, "cx": 590, "cy": 1170, "Z": 800}]}};
-var PVE={on:false,f:null,cur:-1,tr:null,p:0,pv:0,mx:0,my:0,smx:0,smy:0,inside:false,raf:0,last:0,mk:null,land:0},PZB=6000,PFC=1000,PEX=560,PAR=720;
+var PVE={on:false,f:null,cur:-1,tr:null,p:0,pv:0,mx:0,my:0,smx:0,smy:0,inside:false,raf:0,last:0,mk:null,land:0},PZB=6000,PFC=1000,PEX=470,PAR=620;
 function pvOK(){return !mqNarrow.matches&&!reduced()&&matchMedia('(hover: hover) and (pointer: fine)').matches&&!wvOn();}
 function pvFxHtml(p){return FXL[p.slug]?{a:' data-fx="'+p.slug+'"',b:'<img class="pv-fxbg" alt="" draggable="false">',c:'<div class="pv-lay"></div>'}:{a:'',b:'',c:''};}
 function pvClamp(u){return Math.max(0,Math.min(1,u));}
@@ -1770,8 +1770,8 @@ function pvLoop(n){var E=PVE;E.raf=0;if(!E.on||!E.f||!document.body.contains(E.f
    var sw=lay?E.p:0,bg=cv._flat;if(bg)bg.style.transform=pvBgPose(lay,E.p,S,E.smx*sw,E.smy*sw);
    if(lay){var tz=240*E.p,tx=85*E.smx*sw,ty=30*E.smy*sw;cv._fx.els.forEach(function(e){pvElPose(e,cv._fx.d,tz,tx,ty,S,1);});pvClip(cv,Math.max(0,E.p));}}}
  else{var Te=pvClamp((n-tr.t0)/PEX),A=tr.A,B=tr.B;tr.aL=!!(A._fx&&A._fx.ready);tr.bL=!!(B._fx&&B._fx.ready);
-  if(tr.ta===null&&n>=tr.t0+PEX*.75&&(tr.landed||n>=tr.t0+1500))tr.ta=n;
-  var Ta=tr.ta===null?0:pvClamp((n-tr.ta)/PAR),uu=pvClamp(Te),u=uu<.5?4*uu*uu*uu:1-Math.pow(-2*uu+2,3)/2,v=pvEOut(Te),pp=tr.bL?Ta:0;
+  if(tr.ta===null&&n>=tr.t0+PEX*.62)tr.ta=n;
+  var Ta=tr.ta===null?0:pvClamp((n-tr.ta)/PAR),uu=pvClamp(Te/.7),u=uu<.5?4*uu*uu*uu:1-Math.pow(-2*uu+2,3)/2,v=pvEOut(Te),pp=tr.bL?Ta:0;
   var bgA=A._flat,bgB=B._flat;
   if(bgA){bgA.style.transform='translate('+tr.shx+'px,'+tr.shy+'px) scale('+(tr.sb0*(1+.14*u))+')';bgA.style.opacity=1-u;}
   if(bgB){bgB.style.transform=pvBgPose(tr.bL,pp,S,E.smx*pp,E.smy*pp)+' scale('+(.97+.03*v)+')';bgB.style.opacity=1;}
@@ -2076,7 +2076,7 @@ new MutationObserver(function(){clampSoon();setTimeout(function(){clampTexts(fal
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){clampTexts(true);});
 var clampW=innerWidth;window.addEventListener('resize',function(){if(innerWidth===clampW)return;clampW=innerWidth;clearTimeout(clampT);clampT=setTimeout(function(){clampTexts(true);},200);});
 /* stale-page guard: if the phone shows a cached copy of the page, fetch the current build stamp and reload once with a fresh address */
-(function(){var B='20261112045445';try{fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():B;}).then(function(v){v=String(v).trim();if(v&&v!==B&&sessionStorage.getItem('rb')!==v){sessionStorage.setItem('rb',v);location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);}}).catch(function(){});}catch(e){}})();
+(function(){var B='20261112054427';try{fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():B;}).then(function(v){v=String(v).trim();if(v&&v!==B&&sessionStorage.getItem('rb')!==v){sessionStorage.setItem('rb',v);location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);}}).catch(function(){});}catch(e){}})();
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.ab-more');if(!b)return;var box=b.closest('.ab-intro');if(!box)return;var open=box.classList.toggle('open');b.textContent=open?'Less':'More';b.setAttribute('aria-expanded',open?'true':'false');setTimeout(function(){b.classList.remove('is-tapped');},550);});
 /* tab pills (Designer cases | Concepts, Creatives | Projects): tap, or hold and slide - the thumb follows the finger and lifting selects the tab under it */
 (function(){var D=null,BLK=false;
