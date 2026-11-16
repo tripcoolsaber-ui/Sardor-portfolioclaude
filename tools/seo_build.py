@@ -380,11 +380,13 @@ def case_body(p):
     def f(lang):
         rows = [('Role', p.get('role')), ('Industry', p.get('category')), ('Period', p.get('year'))]
         parts = ['<h1>%s</h1>' % esc(p['title']), '<p>%s</p>' % esc(tr(p.get('desc'), lang)), dl(rows, lang)]
+        if p.get('contrib'):
+            parts.append('<h2>My Contribution</h2><ul>%s</ul>' % ''.join('<li>%s</li>' % esc(tr(c, lang)) for c in lines(p['contrib'])))
         cover = pick_cover(p.get('cover'))
         parts.append(img_tag(cover, p['title']))
         if p.get('subs'):
-            parts.append('<h2>%s</h2><ul>%s</ul>' % (esc(tr('Projects', lang)), ''.join(
-                '<li><h3><a href="%s">%s</a></h3><p>%s</p></li>' % (L(proj_path(p, s), lang), esc(s['title'] + (' — ' + tr(s.get('sub'), lang) if s.get('sub') else '')), esc(tr(s.get('cardDesc') or s.get('desc'), lang)))
+            parts.append('<h2>%s</h2><ul>%s</ul>' % (esc('Featured Projects' if p.get('projFirst') else tr('Projects', lang)), ''.join(
+                '<li><h3><a href="%s">%s</a></h3><p>%s</p></li>' % (L(proj_path(p, s), lang), esc(s['title'] + (' — ' + tr(s.get('sub'), lang) if s.get('sub') else '')), esc(tr((p.get('projFirst') and s.get('featDesc')) or s.get('cardDesc') or s.get('desc'), lang)))
                 for s in p['subs'])))
         cre = [m_ for m_ in (p.get('media') or []) if m_.get('title')]
         if cre:
