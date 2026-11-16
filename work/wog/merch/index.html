@@ -1505,7 +1505,7 @@ html[lang="ru"] .h2-slogan{font-size:clamp(2.2rem,calc(6.6*var(--u)),9rem)}
  body.on-work .wview button[aria-pressed="true"]{color:#fff}
  body.on-work .wview svg{width:calc(1.5*var(--u));height:calc(1.5*var(--u))}
  body.on-work .wview .wvthumb{position:absolute;left:calc(.24*var(--u));top:calc(.24*var(--u));bottom:calc(.24*var(--u));width:calc(5.4*var(--u));border-radius:99px;box-shadow:inset 0 0 0 1.5px #2f6bff,0 0 calc(1.1*var(--u)) rgba(47,107,255,.4);background:rgba(40,90,220,.22);transition:transform .45s cubic-bezier(.3,.8,.2,1)}
- body.on-work .wview[data-v="tiles"] .wvthumb{transform:translateX(calc(5.4*var(--u)))}
+ body.on-work .wview[data-v="proj"] .wvthumb{transform:translateX(calc(5.4*var(--u)))}
  /* projector view */
  body.on-work .work-right{position:absolute;left:calc(var(--ox) + 42.8*var(--u));top:calc(var(--oy) + 50*var(--v) - 12.3*var(--u));width:calc(43.7*var(--u));height:calc(24.58*var(--u));margin:0}
  body.on-work .work-right .preview{height:100%}
@@ -1873,7 +1873,7 @@ var WVI={proj:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" w
  layers:'<svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 3.5 8.2 12 13l8.5-4.8L12 3.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M3.5 12.3 12 17l8.5-4.7M3.5 16.3 12 21l8.5-4.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>'};
 WVI.grid=WVI.tiles.replace('<svg ','<svg class="ti" ');
 function SMT(u){return SMALL[u]?'s/'+u:u;}
-function wvToggle(){if(mqNarrow.matches)return '';return '<div class="wview" role="group" aria-label="View" data-v="'+WV+'"><span class="wvthumb" aria-hidden="true"></span><button type="button" data-wv="proj" aria-pressed="'+(WV==='proj')+'" aria-label="Projector">'+WVI.proj+'</button><button type="button" data-wv="tiles" aria-pressed="'+(WV==='tiles')+'" aria-label="Tiles">'+WVI.tiles+'</button></div>';}
+function wvToggle(){if(mqNarrow.matches)return '';return '<div class="wview" role="group" aria-label="View" data-v="'+WV+'"><span class="wvthumb" aria-hidden="true"></span><button type="button" data-wv="tiles" aria-pressed="'+(WV==='tiles')+'" aria-label="Tiles">'+WVI.tiles+'</button><button type="button" data-wv="proj" aria-pressed="'+(WV==='proj')+'" aria-label="Projector">'+WVI.proj+'</button></div>';}
 function wkTiles(L){if(mqNarrow.matches)return '';return '<div class="wk-tiles">'+L.map(function(p,i){var cm=p.cover&&p.cover.src?p.cover.src:'';if(!cm){var mo=mediaOf(p,i)[0];if(mo&&mo.type!=='video')cm=mo.src;}var href='#/work/'+esc(p.slug);return '<article class="wk-tile" style="--i:'+i+'"><a class="wk-tcv" href="'+href+'" data-link tabindex="-1" aria-hidden="true">'+(cm?'<img src="'+esc(SMT(cm))+'" alt="" loading="lazy" decoding="async">':'')+'</a><div class="wk-bar"><div class="wk-txt"><div class="wk-name">'+esc(p.title)+flagSet(p.markets)+'</div><span class="wk-meta">'+esc([p.category].filter(Boolean).join(' · ')+accN(p))+'</span></div><a class="acc-open wk-open" href="'+href+'" data-link>Open case →</a></div></article>';}).join('')+'</div>'+(wvOn()?'<div class="wk-robot pet-home current" data-pet="robot"></div>':'');}
 function pageWork(){
   if(!wItems().length&&WT!=='design')WT='design';var L=wItems();if(wa>=L.length)wa=0;
@@ -2095,7 +2095,7 @@ new MutationObserver(function(){clampSoon();setTimeout(function(){clampTexts(fal
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){clampTexts(true);});
 var clampW=innerWidth;window.addEventListener('resize',function(){if(innerWidth===clampW)return;clampW=innerWidth;clearTimeout(clampT);clampT=setTimeout(function(){clampTexts(true);},200);});
 /* stale-page guard: if the phone shows a cached copy of the page, fetch the current build stamp and reload once with a fresh address */
-(function(){var B='20261116063646';try{fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():B;}).then(function(v){v=String(v).trim();if(v&&v!==B&&sessionStorage.getItem('rb')!==v){sessionStorage.setItem('rb',v);location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);}}).catch(function(){});}catch(e){}})();
+(function(){var B='20261116064136';try{fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():B;}).then(function(v){v=String(v).trim();if(v&&v!==B&&sessionStorage.getItem('rb')!==v){sessionStorage.setItem('rb',v);location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);}}).catch(function(){});}catch(e){}})();
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.ab-more');if(!b)return;var box=b.closest('.ab-intro');if(!box)return;var open=box.classList.toggle('open');b.textContent=open?'Less':'More';b.setAttribute('aria-expanded',open?'true':'false');setTimeout(function(){b.classList.remove('is-tapped');},550);});
 /* tab pills (Designer cases | Concepts, Creatives | Projects): tap, or hold and slide - the thumb follows the finger and lifting selects the tab under it */
 (function(){var D=null,BLK=false;
