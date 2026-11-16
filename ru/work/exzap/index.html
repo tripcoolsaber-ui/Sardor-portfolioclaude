@@ -2094,8 +2094,8 @@ addEventListener('resize',function(){navPill(false);});
 /* phones: the robot never stares at one spot; it glances around by itself and looks where you touch */
 var LK={t:0,hold:0};
 function lkOk(){return mqNarrow.matches&&pet.mode==='robot'&&!busy&&!hinting&&IDL.phase===0&&!CR.on&&!(typeof DZ!=='undefined'&&DZ.st)&&cur&&document.visibilityState==='visible'&&+petEl.style.opacity!==0&&!/\b(antic|xform|morph|landing|waking|bored|hello|yawn|happy)\b/.test(petEl.className);}
-function lookAround(){clearTimeout(LK.t);if(lkOk()&&performance.now()>LK.hold){var x=0,y=0;eyeTo(x,y);if(PF){pose.t=Math.max(-1,Math.min(1,x/12))*PF.n*.5;poseRun();}}LK.t=setTimeout(lookAround,1400+Math.random()*2800);}
-document.addEventListener('pointerdown',function(e){if(e.pointerType!=='touch'||!lkOk())return;var dx=e.clientX-pet.x,dy=e.clientY-pet.y,d=Math.hypot(dx,dy)||1,k=Math.min(1,d/220);eyeTo(dx/d*10*k,dy/d*6*k);if(PF){pose.t=Math.max(-1,Math.min(1,dx/Math.max(220,innerWidth*.34)))*PF.n*.6;poseRun();}LK.hold=performance.now()+1300;clearTimeout(LK.t);LK.t=setTimeout(lookAround,1500);},{passive:true});
+function lookAround(){clearTimeout(LK.t);if(lkOk()&&performance.now()>LK.hold){var st=petStill(),x=st||Math.random()<.22?0:(Math.random()*2-1)*11,y=st||Math.random()<.22?0:(Math.random()*2-1)*6;eyeTo(x,y);if(PF){pose.t=Math.max(-1,Math.min(1,x/12))*PF.n*.5;poseRun();}}LK.t=setTimeout(lookAround,1400+Math.random()*2800);}
+document.addEventListener('pointerdown',function(e){if(e.pointerType!=='touch'||!lkOk()||petStill())return;var dx=e.clientX-pet.x,dy=e.clientY-pet.y,d=Math.hypot(dx,dy)||1,k=Math.min(1,d/220);eyeTo(dx/d*10*k,dy/d*6*k);if(PF){pose.t=Math.max(-1,Math.min(1,dx/Math.max(220,innerWidth*.34)))*PF.n*.6;poseRun();}LK.hold=performance.now()+1300;clearTimeout(LK.t);LK.t=setTimeout(lookAround,1500);},{passive:true});
 setTimeout(lookAround,1800);
 /* phones: long descriptions show a few lines and a "More" button; the full text is one tap away (nothing is removed, desktop is untouched) */
 var CLAMPS=[['.case-desc',1],['.pj-txt p',1],['.ab-job p',1]];
@@ -2121,7 +2121,7 @@ new MutationObserver(function(){clampSoon();setTimeout(function(){clampTexts(fal
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){clampTexts(true);});
 var clampW=innerWidth;window.addEventListener('resize',function(){if(innerWidth===clampW)return;clampW=innerWidth;clearTimeout(clampT);clampT=setTimeout(function(){clampTexts(true);},200);});
 /* stale-page guard: if the phone shows a cached copy of the page, fetch the current build stamp and reload once with a fresh address */
-(function(){var B='20261116103355';try{fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():B;}).then(function(v){v=String(v).trim();if(v&&v!==B&&sessionStorage.getItem('rb')!==v){sessionStorage.setItem('rb',v);location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);}}).catch(function(){});}catch(e){}})();
+(function(){var B='20261116104750';try{fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():B;}).then(function(v){v=String(v).trim();if(v&&v!==B&&sessionStorage.getItem('rb')!==v){sessionStorage.setItem('rb',v);location.replace(location.pathname+'?v='+encodeURIComponent(v)+location.hash);}}).catch(function(){});}catch(e){}})();
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.ab-more');if(!b)return;var box=b.closest('.ab-intro');if(!box)return;var open=box.classList.toggle('open');b.textContent=open?'Less':'More';b.setAttribute('aria-expanded',open?'true':'false');setTimeout(function(){b.classList.remove('is-tapped');},550);});
 /* tab pills (Designer cases | Concepts, Creatives | Projects): tap, or hold and slide - the thumb follows the finger and lifting selects the tab under it */
 (function(){var D=null,BLK=false;
@@ -2560,8 +2560,11 @@ function petMove(to,o){
   return tween(o.dur||420,function(e){if(tok!==pet.tok)return false;if(o.live){var lt=o.live();if(lt){dx=lt.x-f.x;dy=lt.y-f.y;to=lt;}}var x=f.x+dx*e,y=f.y+dy*e-Math.sin(Math.PI*e)*lift,k=f.k+(to.k-f.k)*e;place(x,y,k);trailPush(x,y,120*k*.34);}).then(function(ok){if(tok===pet.tok)pet.moving=false;return ok&&tok===pet.tok;});
 }
 (function blinkLoop(){setTimeout(function(){if(!reduced()&&pet.mode==='robot'){petEl.classList.add('blink');setTimeout(function(){petEl.classList.remove('blink');},130);}blinkLoop();},2400+Math.random()*3800);})();
-var lookRaf=0,lookPt=null,LOOKR=0;
-document.addEventListener('pointermove',function(e){if(e.pointerType==='touch')return;lookPt=[e.clientX,e.clientY];if(!lookRaf)lookRaf=requestAnimationFrame(function(){lookRaf=0;if(!lookPt)return;var dx=lookPt[0]-pet.x,dy=lookPt[1]-pet.y,d=Math.hypot(dx,dy)||1,near=d<LOOKR,s=near?Math.min(1,d/260):0;if(!DZ.st)eyeTo(dx/d*9*s,dy/d*6*s);if(PF&&pet.mode==='robot'&&!busy&&IDL.phase<2&&!CR.on&&!DZ.st&&!petEl.classList.contains('antic')){pose.t=near?Math.max(-1,Math.min(1,dx/Math.max(260,innerWidth*.34)))*PF.n:0;poseRun();}});},{passive:true});
+var lookRaf=0,lookPt=null;
+/* on case pages (a case and its projects) the robot looks straight ahead and does not turn; everywhere else it follows the cursor */
+function petStill(){return !!(cur&&(cur.name==='case'||cur.name==='project'));}
+window.addEventListener('routechange',function(){if(petStill()){eyeTo(0,0);if(PF){pose.t=0;poseRun();}}});
+document.addEventListener('pointermove',function(e){if(e.pointerType==='touch')return;lookPt=[e.clientX,e.clientY];if(!lookRaf)lookRaf=requestAnimationFrame(function(){lookRaf=0;if(!lookPt)return;var dx=lookPt[0]-pet.x,dy=lookPt[1]-pet.y,d=Math.hypot(dx,dy)||1,near=!petStill(),s=near?Math.min(1,d/260):0;if(!DZ.st)eyeTo(dx/d*9*s,dy/d*6*s);if(PF&&pet.mode==='robot'&&!busy&&IDL.phase<2&&!CR.on&&!DZ.st&&!petEl.classList.contains('antic')){pose.t=near?Math.max(-1,Math.min(1,dx/Math.max(260,innerWidth*.34)))*PF.n:0;poseRun();}});},{passive:true});
 var snapRaf=0;function reSnap(){if(!snapRaf)snapRaf=requestAnimationFrame(function(){snapRaf=0;snap();sizeCanvas();if(cur&&cur.name==='work')cardPlace(wa);});}
 window.addEventListener('scroll',function(){if(!mqNarrow.matches)reSnap();beam.style.opacity=0;},{passive:true});
 window.addEventListener('resize',reSnap);
