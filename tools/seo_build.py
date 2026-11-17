@@ -305,9 +305,9 @@ def about_body(lang):
             else 'Ведущий дизайнер / арт-директор из Ташкента, с опытом в рекламе и дизайне более 15 лет.')
     para = tr('I create visual systems, brand identities and creative communications for digital and physical products. My work spans brand, product and marketing design, motion and AI-assisted visuals.', lang)
     events = ''.join('<li>%s</li>' % esc(e) for e in lines(P.get('events')))
-    return ('<h1>%s</h1><p>%s</p><p>%s</p><ul>%s</ul><p><a href="/Sardor-Badalov-CV.pdf">%s</a></p>'
+    return ('<h1>%s</h1><p>%s</p><p>%s</p><ul>%s</ul><p><a href="%s">%s</a></p>'
             '<h2>%s</h2><ul>%s</ul><h2>%s</h2><ul>%s</ul>') % (
-        'About me' if lang == 'en' else 'Обо мне', esc(head), esc(para), facts, esc(tr('Download CV (PDF)', lang)),
+        'About me' if lang == 'en' else 'Обо мне', esc(head), esc(para), facts, '/Sardor-Badalov-CV-RU.pdf' if lang == 'ru' else '/Sardor-Badalov-CV.pdf', esc(tr('Download CV (PDF)', lang)),
         esc(tr('Experience', lang)), ''.join(exp), 'Exhibitions & events' if lang == 'en' else 'Выставки и события', events)
 
 
@@ -324,7 +324,7 @@ def contact_body(lang):
         x = ln.split('|', 1)
         if len(x) == 2:
             links.append((x[1].strip(), x[0].strip()))
-    links.append(('/Sardor-Badalov-CV.pdf', tr('Download CV (PDF)', lang)))
+    links.append(('/Sardor-Badalov-CV-RU.pdf' if lang == 'ru' else '/Sardor-Badalov-CV.pdf', tr('Download CV (PDF)', lang)))
     skills = ['Branding', 'Logo design', 'Brand identity', 'Packaging', 'Key visuals', 'Art direction', 'Motion']
     return '<h1>%s</h1><p>%s</p><ul>%s</ul><h2>%s</h2><ul>%s</ul><p>%s</p>' % (
         'Contact' if lang == 'en' else 'Контакты',
