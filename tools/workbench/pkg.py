@@ -15,15 +15,41 @@ VAR={'A':[('hw-file',HW),('px-file',PX)],
 SQ=V=='D'
 LEAD=('Beyond the garment.','Больше, чем одежда.')
 INTRO=('A limited-edition collector set extends THE HOOD identity through functional accessories, custom hardware, printed materials and individually numbered packaging.',
-       'Лимитированный коллекционный набор продолжает айдентику THE HOOD через функциональные аксессуары, фирменную фурнитуру, печатные материалы и индивидуальную нумерацию.')
-BOX=('Presentation Box','A black box with burgundy accents and the edition number 01 / 10.','Чёрная коробка с бордовыми акцентами и номером выпуска 01 / 10.')
-MAIN=('Full Collector Set','The complete limited-edition experience.','Полная композиция лимитированного набора.')
+       'Коллекционный набор продолжает визуальный язык THE HOOD за пределами самого худи.\n\nФункциональные аксессуары, фирменная фурнитура, печатные материалы и индивидуальная нумерация объединены в единую систему упаковки.')
+BOX=('Presentation Box'+K,'A black box with burgundy accents and the edition number 01 / 10.','Чёрная коробка с бордовыми акцентами и индивидуальной нумерацией 01\u00a0/\u00a010.')
+MAIN=('Full Collector Set'+K,'The complete limited-edition experience.','Полная презентация лимитированной коллекции и её аксессуаров.')
 s,m,st=load()
 p=[y for y in st['projects'] if y['slug']=='the-hood'][0];sp=p['subs'][0]
 c=[x for x in sp['chapters'] if x['title'].startswith('Packaging Experience')][0]
 c.update({'text':INTRO[0],'lead':LEAD[0],'vert':True,'media':[{'type':'image','src':'hd-box.webp','ratio':'2000/1493'},{'type':'image','src':'hd-collector-set.webp','ratio':'1448/1086'}],
- 'pkg':{'main':[{'title':BOX[0],'text':BOX[1]},{'title':MAIN[0],'text':MAIN[1]}],'sq':SQ,'tiles':[{'src':IMG[k][0],'ratio':IMG[k][1],'title':t[0],'text':t[1]} for k,t in VAR]}})
+ 'pkg':{'main':[{'title':BOX[0],'text':BOX[1]},{'title':MAIN[0],'text':MAIN[1]}],'sq':SQ,'tiles':[]}})
 c.pop('wide',None)
+sp['lbl']={'self':'Self-initiated'+K,'industry':'Industry'+K,'deliverables':'Deliverables'+K}
+sp['contribLabel']='My Contribution'+K
+for pt in sp['chapters'][1]['parts']:
+    if not pt['title'].endswith(K): pt['title']+=K
+CH={x['title']:x for x in sp['chapters']}
+LOC={'Self-initiated'+K:'Авторский проект','Industry'+K:'Сфера','Deliverables'+K:'Что разработано','My Contribution'+K:'Мой вклад',
+ sp['sub']:'Концепция лимитированной коллекции уличной одежды',
+ sp['desc']:'THE HOOD — авторская концепция лимитированной коллекции уличной одежды, основанная на выразительном силуэте, оригинальной графике и продуманных функциональных деталях.\n\nВместо крупных логотипов характер бренда раскрывается через дизайн самого худи и продолжается в коллекционном наборе.',
+ sp['cardDesc']:'THE HOOD — авторская концепция лимитированной коллекции уличной одежды, основанная на выразительном силуэте, оригинальной графике и продуманных функциональных деталях.',
+ sp['role']:'Арт-дирекшн · Айдентика · Графика для одежды · Дизайн упаковки',
+ sp['industry']:'Мода / Уличная одежда',
+ sp['deliverables']:'Айдентика · Ключевые визуалы · Дизайн худи · Фурнитура · Концепция упаковки',
+ 'Art Direction'+K:'Арт-дирекшн','Brand Identity'+K:'Айдентика','Garment Graphics'+K:'Графика для одежды','Key Visuals'+K:'Ключевые визуалы','Hardware & Packaging Concept'+K:'Концепция фурнитуры и упаковки',
+ 'Brand Concept'+K:'Концепция бренда','Visual Identity'+K:'Айдентика','Campaign'+K:'Рекламная кампания','Garment Design'+K:'Дизайн худи','Materials & Details'+K:'Материалы и детали','Packaging Experience'+K:'Упаковка',
+ CH['Brand Concept'+K]['text']:'Концепция THE HOOD строится на идее одежды как способа самовыражения.\n\nПри разработке я объединил силуэт, авторскую графику и функциональные детали в единую визуальную систему, формирующую узнаваемый характер бренда.',
+ CH['Visual Identity'+K]['text']:'Фирменный знак изображает фигуру в капюшоне со скрытым лицом — символ анонимности и личной свободы.\n\nВ шрифтовой части логотипа тонкие буквы сочетаются с насыщенными, создавая контраст сдержанности и силы.',
+ CH['Campaign'+K]['text']:'Рекламная кампания строится на контрасте одинокой фигуры и масштабных городских и природных пространств.\n\nЭтот приём подчёркивает независимый характер бренда, оставляя худи и авторскую графику в центре внимания.',
+ CH['Garment Design'+K]['text']:'В концепции худи соединены свободный объёмный силуэт, утилитарные детали и крупная графическая композиция на спине.\n\nРисунок задуман как часть дизайна изделия, а не как отдельное размещение крупного логотипа.',
+ CH['Materials & Details'+K]['text']:'Характер худи раскрывается через фактуру ткани, швы, ярлыки и металлическую фурнитуру в индустриальной эстетике.\n\nВместе эти элементы формируют единый визуальный язык, в котором фирменный знак остаётся деликатным акцентом, а не доминирующей графикой.',
+ 'The Symbol'+K:'Символ','The Wordmark'+K:'Шрифтовая часть логотипа','The Tagline'+K:'Фирменный дескриптор',
+ 'A hooded figure creates a recognizable visual signature.':'Фигура в капюшоне — основной узнаваемый элемент айдентики.',
+ 'Contrasting letterforms give the name its visual character.':'Контраст начертаний придаёт названию выразительный характер.',
+ 'A concise reference to the limited-edition concept.':'Короткая подпись подчёркивает лимитированный характер коллекции.'}
+seo=sp.get('seo') or {}
+seo.update({'title_ru':'THE HOOD — концепция бренда уличной одежды | Beyond Form','desc_ru':'THE HOOD — авторская концепция лимитированной коллекции уличной одежды: айдентика, графика, фирменная фурнитура и коллекционная упаковка.'})
+sp['seo']=seo
 save(s,m,st)
 h=open('/tmp/gh/index.html').read()
 def rep(a,b,cnt=1):
@@ -36,7 +62,7 @@ rep(",!!c.wide,!!c.tight];});",",!!c.wide,!!c.tight,'',!!c.vert];});")
 rep("(x[4]?' pj-tight':'')+'\" id=\"pj-'","(x[4]?' pj-tight':'')+(x[6]?' pj-vert':'')+'\" id=\"pj-'")
 # 2) renderer + full-screen on click (only for this layout)
 JS=r"""function pjPkg(c){var P=c.pkg||{},MM=c.media,PM=[].concat(P.main||[]),T=P.tiles||[],f=function(m,n,t,cls,ar){return '<figure class="pkx-f '+cls+'" data-r="'+esc(m.ratio)+'" tabindex="0" role="button" aria-label="'+esc(t.title)+'"><div class="pkx-im" style="aspect-ratio:'+esc(ar||m.ratio)+'"><img src="'+esc(m.src)+'" alt="'+esc(t.title)+'" loading="lazy" decoding="async"></div><figcaption><em>'+pad(n)+'</em><b>'+esc(t.title)+'</b><span>'+esc(t.text)+'</span></figcaption></figure>';};
- return '<div class="pkx"><div class="pkx-pair" style="--n:'+PM.length+'">'+PM.map(function(t,k){return f(MM[k],k+1,t,'pkx-main',PM.length>1?'4/3':'');}).join('')+'</div><div class="pkx-row" style="--n:'+T.length+'">'+T.map(function(t,k){return f(t,k+1+PM.length,t,'pkx-tile',P.sq?'1/1':'4/3');}).join('')+'</div></div>';}
+ return '<div class="pkx"><div class="pkx-pair" style="--n:'+PM.length+'">'+PM.map(function(t,k){return f(MM[k],k+1,t,'pkx-main',PM.length>1?'4/3':'');}).join('')+'</div>'+(T.length?'<div class="pkx-row" style="--n:'+T.length+'">'+T.map(function(t,k){return f(t,k+1+PM.length,t,'pkx-tile',P.sq?'1/1':'4/3');}).join('')+'</div>':'')+'</div>';}
 document.addEventListener('click',function(e){var f=e.target.closest&&e.target.closest('.pkx-f');if(f)cfFull(f);});
 document.addEventListener('keydown',function(e){var f=document.activeElement;if((e.key==='Enter'||e.key===' ')&&f&&f.classList&&f.classList.contains('pkx-f')){e.preventDefault();cfFull(f);}});
 """
@@ -69,8 +95,11 @@ h=h[:k]+CSS+h[k:]
 h=h.replace(' .pj-sec figure:has(img[src$="hd-pouch.webp"]){max-width:62%;margin-left:auto}','')
 # 4) phones: lighter main image
 h=h.replace('<script type="application/json" id="smallmap">{','<script type="application/json" id="smallmap">{"hd-collector-set.webp":1,',1)
+# 4b) case-only labels for the meta block
+rep("<dt>Project type</dt><dd><span class=\"pj-selfi\">Self-initiated\u200b</span>","<dt>Project type</dt><dd><span class=\"pj-selfi\">'+(sp.lbl&&sp.lbl.self||'Self-initiated\u200b')+'</span>")
+rep("['Industry',sp.industry],['Period',sp.period],['Deliverables',sp.deliverables]","[sp.lbl&&sp.lbl.industry||'Industry',sp.industry],['Period',sp.period],[sp.lbl&&sp.lbl.deliverables||'Deliverables',sp.deliverables]")
 # 5) Russian
-RU={BOX[1]:BOX[2],LEAD[0]:LEAD[1],INTRO[0]:INTRO[1],MAIN[1]:MAIN[2],HW[1]:HW[2],PM[1]:PM[2],PX[1]:PX[2]}
+RU={**LOC,BOX[0]:'Фирменная коробка',MAIN[0]:'Полный коллекционный набор',BOX[1]:BOX[2],LEAD[0]:LEAD[1],INTRO[0]:INTRO[1],MAIN[1]:MAIN[2],HW[1]:HW[2],PM[1]:PM[2],PX[1]:PX[2]}
 mm=re.search(r"var LANG='en',TITLE_EN='',RU=\{",h);i=mm.end()-1;j=h.find('};',i)
 h=h[:j]+''.join(','+json.dumps(a,ensure_ascii=False)+':'+json.dumps(b,ensure_ascii=False) for a,b in RU.items())+h[j:]
 open('/tmp/gh/index.html','w').write(h)
