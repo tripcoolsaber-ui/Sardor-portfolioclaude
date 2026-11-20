@@ -303,7 +303,7 @@ def about_body(lang):
     facts = ''.join('<li>%s</li>' % esc(tr(f, lang)) for f in lines(P.get('aboutFacts')))
     head = ('Lead Designer / Art Director based in Tashkent, with 15+ years of experience in advertising and design.' if lang == 'en'
             else 'Ведущий дизайнер / арт-директор из Ташкента, с опытом в рекламе и дизайне более 15 лет.')
-    para = tr('I create visual systems, brand identities and creative communications for digital and physical products. My work spans brand, product and marketing design, motion and AI-assisted visuals.', lang)
+    para = tr('I\'ve worked in advertising and design since 2010, across brand identity, packaging, campaigns and visual communications for different industries. My work includes developing concepts and carrying them through to digital, print and physical applications. In team projects, I help set the visual direction, assign tasks and review design, while continuing to work hands-on.', lang)
     events = ''.join('<li>%s</li>' % esc(e) for e in lines(P.get('events')))
     return ('<h1>%s</h1><p>%s</p><p>%s</p><ul>%s</ul><p><a href="%s">%s</a></p>'
             '<h2>%s</h2><ul>%s</ul><h2>%s</h2><ul>%s</ul>') % (
@@ -328,7 +328,7 @@ def contact_body(lang):
     skills = ['Branding', 'Logo design', 'Brand identity', 'Packaging', 'Key visuals', 'Art direction', 'Motion']
     return '<h1>%s</h1><p>%s</p><ul>%s</ul><h2>%s</h2><ul>%s</ul><p>%s</p>' % (
         'Contact' if lang == 'en' else 'Контакты',
-        esc(tr('Ideas, collaborations and ambitious projects start with a conversation.', lang)),
+        esc(tr('Open to art direction, branding and visual communication projects. If my experience fits what you\'re working on, I\'d be glad to hear from you.', lang)),
         ''.join('<li><a href="%s">%s</a></li>' % (esc(u), esc(t)) for u, t in links),
         'What I do' if lang == 'en' else 'Чем я занимаюсь', ''.join('<li>%s</li>' % esc(tr(k, lang)) for k in skills),
         esc(tr('Tashkent · open to business travel', lang)))
@@ -427,7 +427,7 @@ def case_body(p):
         cover = pick_cover(p.get('cover'))
         parts.append(img_tag(cover, p['title']))
         if p.get('subs'):
-            parts.append('<h2>%s</h2><ul>%s</ul>' % (esc('Featured Projects' if p.get('projFirst') else tr('Projects', lang)), ''.join(
+            parts.append('<h2>%s</h2><ul>%s</ul>' % (esc(tr('Featured Projects', lang) if p.get('projFirst') else tr('Projects', lang)), ''.join(
                 '<li><h3><a href="%s">%s</a></h3><p>%s</p></li>' % (L(proj_path(p, s), lang), esc(s['title'] + (' — ' + tr(s.get('sub'), lang) if s.get('sub') else '')), esc(tr((p.get('projFirst') and s.get('featDesc')) or s.get('cardDesc') or s.get('desc'), lang)))
                 for s in p['subs'])))
         cre = [m_ for m_ in (p.get('media') or []) if m_.get('title')]
