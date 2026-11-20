@@ -21,7 +21,7 @@ MAIN=('Full Collector Set'+K,'The complete limited-edition experience.','Пол�
 s,m,st=load()
 p=[y for y in st['projects'] if y['slug']=='the-hood'][0];sp=p['subs'][0]
 c=[x for x in sp['chapters'] if x['title'].startswith('Packaging Experience')][0]
-c.update({'text':INTRO[0],'lead':LEAD[0],'vert':True,'media':[{'type':'image','src':'hd-box.webp','ratio':'2000/1493'},{'type':'image','src':'hd-collector-set-2.webp','ratio':'1448/1086'}],
+c.update({'text':INTRO[0],'lead':LEAD[0],'vert':True,'media':[{'type':'image','src':'hd-box.webp','ratio':'2000/1493'},{'type':'image','src':'hd-collector-set-3.webp','ratio':'1448/1086'}],
  'pkg':{'main':[{'title':BOX[0],'text':BOX[1]},{'title':MAIN[0],'text':MAIN[1]}],'sq':SQ,'tiles':[]}})
 c.pop('wide',None)
 sp['lbl']={'self':'Self-initiated'+K,'industry':'Industry'+K,'deliverables':'Deliverables'+K}
@@ -94,7 +94,7 @@ h=h[:k]+CSS+h[k:]
 # old pouch rule no longer used in this chapter
 h=h.replace(' .pj-sec figure:has(img[src$="hd-pouch.webp"]){max-width:62%;margin-left:auto}','')
 # 4) phones: lighter main image
-h=h.replace('<script type="application/json" id="smallmap">{','<script type="application/json" id="smallmap">{"hd-collector-set-2.webp":1,',1)
+h=h.replace('<script type="application/json" id="smallmap">{','<script type="application/json" id="smallmap">{"hd-collector-set-3.webp":1,',1)
 # 4b) case-only labels for the meta block
 rep("<dt>Project type</dt><dd><span class=\"pj-selfi\">Self-initiated\u200b</span>","<dt>Project type</dt><dd><span class=\"pj-selfi\">'+(sp.lbl&&sp.lbl.self||'Self-initiated\u200b')+'</span>")
 rep("['Industry',sp.industry],['Period',sp.period],['Deliverables',sp.deliverables]","[sp.lbl&&sp.lbl.industry||'Industry',sp.industry],['Period',sp.period],[sp.lbl&&sp.lbl.deliverables||'Deliverables',sp.deliverables]")
