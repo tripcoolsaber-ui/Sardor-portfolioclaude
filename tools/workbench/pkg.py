@@ -16,12 +16,13 @@ SQ=V=='D'
 LEAD=('Beyond the garment.','Больше, чем одежда.')
 INTRO=('A limited-edition collector set extends THE HOOD identity through functional accessories, custom hardware, printed materials and individually numbered packaging.',
        'Лимитированный коллекционный набор продолжает айдентику THE HOOD через функциональные аксессуары, фирменную фурнитуру, печатные материалы и индивидуальную нумерацию.')
+BOX=('Presentation Box','A black box with burgundy accents and the edition number 01 / 10.','Чёрная коробка с бордовыми акцентами и номером выпуска 01 / 10.')
 MAIN=('Full Collector Set','The complete limited-edition experience.','Полная композиция лимитированного набора.')
 s,m,st=load()
 p=[y for y in st['projects'] if y['slug']=='the-hood'][0];sp=p['subs'][0]
 c=[x for x in sp['chapters'] if x['title'].startswith('Packaging Experience')][0]
-c.update({'text':INTRO[0],'lead':LEAD[0],'vert':True,'media':[{'type':'image','src':'hd-collector-set.webp','ratio':'1448/1086'}],
- 'pkg':{'main':{'title':MAIN[0],'text':MAIN[1]},'sq':SQ,'tiles':[{'src':IMG[k][0],'ratio':IMG[k][1],'title':t[0],'text':t[1]} for k,t in VAR]}})
+c.update({'text':INTRO[0],'lead':LEAD[0],'vert':True,'media':[{'type':'image','src':'hd-box.webp','ratio':'2000/1493'},{'type':'image','src':'hd-collector-set.webp','ratio':'1448/1086'}],
+ 'pkg':{'main':[{'title':BOX[0],'text':BOX[1]},{'title':MAIN[0],'text':MAIN[1]}],'sq':SQ,'tiles':[{'src':IMG[k][0],'ratio':IMG[k][1],'title':t[0],'text':t[1]} for k,t in VAR]}})
 c.pop('wide',None)
 save(s,m,st)
 h=open('/tmp/gh/index.html').read()
@@ -34,8 +35,8 @@ rep(",c.prods&&(c.media||[]).length?pjProds(c):",",c.pkg&&M.length?pjPkg(c):c.pr
 rep(",!!c.wide,!!c.tight];});",",!!c.wide,!!c.tight,'',!!c.vert];});")
 rep("(x[4]?' pj-tight':'')+'\" id=\"pj-'","(x[4]?' pj-tight':'')+(x[6]?' pj-vert':'')+'\" id=\"pj-'")
 # 2) renderer + full-screen on click (only for this layout)
-JS=r"""function pjPkg(c){var P=c.pkg||{},M=c.media[0],T=P.tiles||[],f=function(m,n,t,cls,ar){return '<figure class="pkx-f '+cls+'" data-r="'+esc(m.ratio)+'" tabindex="0" role="button" aria-label="'+esc(t.title)+'"><div class="pkx-im" style="aspect-ratio:'+esc(ar||m.ratio)+'"><img src="'+esc(m.src)+'" alt="'+esc(t.title)+'" loading="lazy" decoding="async"></div><figcaption><em>'+pad(n)+'</em><b>'+esc(t.title)+'</b><span>'+esc(t.text)+'</span></figcaption></figure>';};
- return '<div class="pkx">'+f(M,1,P.main||{},'pkx-main')+'<div class="pkx-row" style="--n:'+T.length+'">'+T.map(function(t,k){return f(t,k+2,t,'pkx-tile',P.sq?'1/1':'4/3');}).join('')+'</div></div>';}
+JS=r"""function pjPkg(c){var P=c.pkg||{},MM=c.media,PM=[].concat(P.main||[]),T=P.tiles||[],f=function(m,n,t,cls,ar){return '<figure class="pkx-f '+cls+'" data-r="'+esc(m.ratio)+'" tabindex="0" role="button" aria-label="'+esc(t.title)+'"><div class="pkx-im" style="aspect-ratio:'+esc(ar||m.ratio)+'"><img src="'+esc(m.src)+'" alt="'+esc(t.title)+'" loading="lazy" decoding="async"></div><figcaption><em>'+pad(n)+'</em><b>'+esc(t.title)+'</b><span>'+esc(t.text)+'</span></figcaption></figure>';};
+ return '<div class="pkx"><div class="pkx-pair" style="--n:'+PM.length+'">'+PM.map(function(t,k){return f(MM[k],k+1,t,'pkx-main',PM.length>1?'4/3':'');}).join('')+'</div><div class="pkx-row" style="--n:'+T.length+'">'+T.map(function(t,k){return f(t,k+1+PM.length,t,'pkx-tile',P.sq?'1/1':'4/3');}).join('')+'</div></div>';}
 document.addEventListener('click',function(e){var f=e.target.closest&&e.target.closest('.pkx-f');if(f)cfFull(f);});
 document.addEventListener('keydown',function(e){var f=document.activeElement;if((e.key==='Enter'||e.key===' ')&&f&&f.classList&&f.classList.contains('pkx-f')){e.preventDefault();cfFull(f);}});
 """
@@ -57,8 +58,10 @@ CSS=(" .pj-sec.pj-vert{grid-template-columns:1fr!important;gap:0}"
  " .pkx-f figcaption em{grid-row:span 2;font:500 .72rem ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;color:#7fc4ff;font-style:normal;padding-top:4px}"
  " .pkx-f figcaption b{font-weight:600;font-size:.95rem;color:#fff}"
  " .pkx-f figcaption span{font-size:.86rem;line-height:1.45;color:#a9b4c6}"
+ " .pkx-pair{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:16px;align-items:start}"
  " .pkx-row{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:16px;margin-top:clamp(36px,4vw,56px);align-items:start}"
  " @media (max-width:1100px) and (min-width:601px){.pkx-row{grid-template-columns:repeat(2,1fr)}.pkx-row .pkx-tile:nth-child(3):last-child{grid-column:1/-1;width:calc(50% - 8px)}}"
+ " @media (max-width:900px){.pkx-pair{grid-template-columns:1fr;gap:28px}}"
  " @media (max-width:600px){.pkx-row{grid-template-columns:1fr;gap:28px;margin-top:28px}.pj-sec.pj-vert .pj-txt h2{white-space:normal}}")
 k=h.find(" .mk-sec{display:block!important;");assert k>0
 h=h[:k]+CSS+h[k:]
@@ -67,7 +70,7 @@ h=h.replace(' .pj-sec figure:has(img[src$="hd-pouch.webp"]){max-width:62%;margin
 # 4) phones: lighter main image
 h=h.replace('<script type="application/json" id="smallmap">{','<script type="application/json" id="smallmap">{"hd-collector-set.webp":1,',1)
 # 5) Russian
-RU={LEAD[0]:LEAD[1],INTRO[0]:INTRO[1],MAIN[1]:MAIN[2],HW[1]:HW[2],PM[1]:PM[2],PX[1]:PX[2]}
+RU={BOX[1]:BOX[2],LEAD[0]:LEAD[1],INTRO[0]:INTRO[1],MAIN[1]:MAIN[2],HW[1]:HW[2],PM[1]:PM[2],PX[1]:PX[2]}
 mm=re.search(r"var LANG='en',TITLE_EN='',RU=\{",h);i=mm.end()-1;j=h.find('};',i)
 h=h[:j]+''.join(','+json.dumps(a,ensure_ascii=False)+':'+json.dumps(b,ensure_ascii=False) for a,b in RU.items())+h[j:]
 open('/tmp/gh/index.html','w').write(h)
