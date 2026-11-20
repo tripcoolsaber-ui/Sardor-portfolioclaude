@@ -101,7 +101,7 @@ UI = {
     'Read in English': 'Читать на английском', 'Читать на русском': 'Читать на русском',
 }
 
-esc = lambda x: html.escape(str(x or ''), quote=True)
+esc = lambda x: html.escape(re.sub('[\u2060-\u2064\u200b]', '', str(x or '')), quote=True)
 
 
 def read(p):
@@ -345,7 +345,7 @@ def seo_over(x, key, lang):
 
 
 
-INVIS = re.compile('[\u2060\u2061\u2062\u2063\u200b]')
+INVIS = re.compile('[\u2060-\u2064\u200b]')
 
 
 def story_parts(sp, lang):
@@ -395,6 +395,8 @@ def sub_body(p, sp):
         for key, ttl in (('overview', 'Overview'), ('mark', 'The mark'), ('construction', 'Construction'), ('typecolor', 'Type & color'), ('versions', 'Versions'), ('appsText', 'Applications')):
             if sp.get(key):
                 parts.append('<h2>%s</h2><p>%s</p>' % (esc(tr(ttl, lang)), esc(tr(sp[key], lang))))
+        if sp.get('contrib') and not sp.get('story'):
+            parts.append('<h2>%s</h2><ul>%s</ul>' % (esc(tr(sp.get('contribLabel') or 'My Contribution', lang)), ''.join('<li>%s</li>' % esc(tr(c, lang)) for c in lines(sp['contrib']))))
         if sp.get('story'):
             parts += story_parts(sp, lang)
         for ch in ([] if sp.get('story') else (sp.get('chapters') or [])):
@@ -406,7 +408,7 @@ def sub_body(p, sp):
                 elif m_.get('type') == 'video' and m_.get('title'):
                     note = (' (' + tr(m_['note'], lang) + ')') if m_.get('note') else ''
                     parts.append('<p>%s%s</p>' % (esc(tr(m_['title'], lang)), esc(note)))
-        role = [] if sp.get('story') else lines(sp.get('myrole'))
+        role = [] if (sp.get('story') or sp.get('contrib')) else lines(sp.get('myrole'))
         if role:
             parts.append('<h2>%s</h2><ul>%s</ul>' % (esc(tr('My role', lang)), ''.join('<li>%s</li>' % esc(tr(r, lang)) for r in role)))
         if not p.get('single'):
