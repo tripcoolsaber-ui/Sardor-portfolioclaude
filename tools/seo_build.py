@@ -344,11 +344,49 @@ def seo_over(x, key, lang):
     return v
 
 
+
+INVIS = re.compile('[\u2060\u2061\u2062\u2063\u200b]')
+
+
+def story_parts(sp, lang):
+    """Static text for pages built as a story (MilkKalina): section titles, text and images, translated."""
+    from html.parser import HTMLParser
+
+    class P(HTMLParser):
+        def __init__(self):
+            super().__init__(); self.txt = []; self.imgs = []
+        def handle_data(self, d):
+            d = re.sub(r'\s+', ' ', d).strip()
+            if d and not re.fullmatch(r'[0-9 /·]+', d):
+                self.txt.append(d)
+        def handle_starttag(self, tag, attrs):
+            a = dict(attrs)
+            if tag == 'img' and a.get('src') and not a.get('aria-hidden'):
+                self.imgs.append((a['src'], a.get('alt') or sp['title']))
+    out = []
+    lab = sp.get('contribLabel') or 'My Contribution'
+    if sp.get('contrib'):
+        out.append('<h2>%s</h2><ul>%s</ul>' % (esc(INVIS.sub('', tr(lab, lang))), ''.join('<li>%s</li>' % esc(INVIS.sub('', tr(c, lang))) for c in lines(sp['contrib']))))
+    for c in sp.get('story') or []:
+        pr = P(); pr.feed(c.get('html') or '')
+        seen = set(); paras = []
+        for t in pr.txt:
+            r = INVIS.sub('', tr(t, lang))
+            if r not in seen:
+                seen.add(r); paras.append(r)
+        out.append('<h2>%s</h2>' % esc(INVIS.sub('', tr(c.get('t'), lang))))
+        out.append(''.join('<p>%s</p>' % esc(x) for x in paras))
+        imgs = list(pr.imgs) + [(m_.get('src'), m_.get('title') or sp['title']) for m_ in (c.get('car') or []) if m_.get('src')]
+        for src, alt in imgs[:12]:
+            out.append(img_tag(src, INVIS.sub('', tr(alt, lang))))
+    return out
+
 def sub_body(p, sp):
     def f(lang):
         rows = []
         if sp.get('selfInit'):
             rows.append(('Project type', 'Self-initiated'))
+        rows += [tuple(x) for x in (sp.get('metaExtra') or [])]
         rows += [('Role', sp.get('role')), ('Industry', sp.get('industry')), ('Period', sp.get('period')), ('Deliverables', sp.get('deliverables'))]
         name = sp['title'] + (' — ' + tr(sp.get('sub'), lang) if sp.get('sub') else '')
         parts = ['<h1>%s</h1>' % esc(name), '<p>%s</p>' % esc(tr(sp.get('desc'), lang)), dl(rows, lang)]
@@ -357,7 +395,9 @@ def sub_body(p, sp):
         for key, ttl in (('overview', 'Overview'), ('mark', 'The mark'), ('construction', 'Construction'), ('typecolor', 'Type & color'), ('versions', 'Versions'), ('appsText', 'Applications')):
             if sp.get(key):
                 parts.append('<h2>%s</h2><p>%s</p>' % (esc(tr(ttl, lang)), esc(tr(sp[key], lang))))
-        for ch in sp.get('chapters') or []:
+        if sp.get('story'):
+            parts += story_parts(sp, lang)
+        for ch in ([] if sp.get('story') else (sp.get('chapters') or [])):
             parts.append('<h2>%s</h2><p>%s</p>' % (esc(tr(ch.get('title'), lang)), esc(tr(ch.get('text'), lang))))
             for m_ in (ch.get('media') or [])[:6]:
                 if m_.get('type', 'image') == 'image' and m_.get('src'):
@@ -366,7 +406,7 @@ def sub_body(p, sp):
                 elif m_.get('type') == 'video' and m_.get('title'):
                     note = (' (' + tr(m_['note'], lang) + ')') if m_.get('note') else ''
                     parts.append('<p>%s%s</p>' % (esc(tr(m_['title'], lang)), esc(note)))
-        role = lines(sp.get('myrole'))
+        role = [] if sp.get('story') else lines(sp.get('myrole'))
         if role:
             parts.append('<h2>%s</h2><ul>%s</ul>' % (esc(tr('My role', lang)), ''.join('<li>%s</li>' % esc(tr(r, lang)) for r in role)))
         if not p.get('single'):
