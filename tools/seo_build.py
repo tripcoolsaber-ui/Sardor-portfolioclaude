@@ -301,8 +301,8 @@ def about_body(lang):
             esc(x[1]), esc(tr(x[2], lang)), esc(x[0].replace('present', 'настоящее время') if lang == 'ru' else x[0]),
             ('<p>%s</p>' % esc(tr(x[3], lang))) if x[3] else ''))
     facts = ''.join('<li>%s</li>' % esc(tr(f, lang)) for f in lines(P.get('aboutFacts')))
-    head = ('Lead Designer / Art Director based in Tashkent, with 15+ years of experience in advertising and design.' if lang == 'en'
-            else 'Ведущий дизайнер / арт-директор из Ташкента, с опытом в рекламе и дизайне более 15 лет.')
+    head = ('Lead Designer / Art Director with 15+ years of experience in advertising and design.' if lang == 'en'
+            else 'Ведущий дизайнер / арт-директор с опытом в рекламе и дизайне более 15 лет.')
     para = tr('I\'ve worked in advertising and design since 2010, across brand identity, packaging, campaigns and visual communications for different industries. My work includes developing concepts and carrying them through to digital, print and physical applications. In team projects, I help set the visual direction, assign tasks and review design, while continuing to work hands-on.', lang)
     events = ''.join('<li>%s</li>' % esc(e) for e in lines(P.get('events')))
     return ('<h1>%s</h1><p>%s</p><p>%s</p><ul>%s</ul><p><a href="%s">%s</a></p>'
